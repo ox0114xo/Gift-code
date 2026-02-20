@@ -17,15 +17,16 @@
         * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
         .wrap { max-width:600px; margin:0 auto; padding:15px; min-height:100vh; }
         h2 { text-align:center; color:#2c3e50; margin:5px 0 20px; font-size:1.8rem; font-weight:900; }
+        
         .dash { display:flex; background:#fff; padding:15px; border-radius:16px; margin-bottom:15px; text-align:center; box-shadow:0 4px 10px rgba(0,0,0,.05); }
         .dash div { flex:1; }
         .dash span { font-size:.85rem; color:#95a5a6; font-weight:700; }
         .dash strong { display:block; font-size:1.5rem; color:#2c3e50; font-weight:900; }
-        .btn { width:100%; padding:14px; border:none; border-radius:12px; font-weight:bold; font-size:1.05rem; cursor:pointer; margin-bottom:15px; }
-        .btn-install { background:linear-gradient(135deg, #2ecc71, #27ae60); color:#fff; box-shadow:0 4px 15px rgba(46,204,113,.3); display:none; }
+        
         .ctrl { display:flex; gap:8px; margin-bottom:15px; position:sticky; top:10px; z-index:10; background:rgba(242,244,247,.95); padding:5px 0; backdrop-filter:blur(5px); }
         .ctrl button { flex:1; padding:12px 0; border:none; border-radius:50px; background:#fff; font-weight:bold; color:#555; box-shadow:0 2px 8px rgba(0,0,0,.08); cursor:pointer; }
         .ctrl button.on { background:#2c3e50; color:#fff; }
+        
         .card { background:#fff; padding:18px; border-radius:16px; margin-bottom:12px; position:relative; border:1px solid #f0f0f0; }
         .card.r { opacity:.6; background:#f8f9fa; }
         .card.p { background:#fffcf2; }
@@ -39,9 +40,24 @@
         .acts a { color:#999; font-size:.85rem; padding:6px 10px; background:#f9f9f9; border-radius:8px; cursor:pointer; }
         label { display:flex; align-items:center; gap:8px; font-weight:bold; color:#555; cursor:pointer; }
         input[type="checkbox"] { width:22px; height:22px; accent-color:#27ae60; cursor:pointer; }
+        
+        .btn { width:100%; padding:14px; border:none; border-radius:12px; font-weight:bold; font-size:1.05rem; cursor:pointer; margin-bottom:15px; }
+        
         #toast { position:fixed; bottom:-50px; left:50%; transform:translateX(-50%); background:rgba(30,30,30,.9); color:#fff; padding:12px 24px; border-radius:50px; transition:.3s; z-index:99; font-weight:bold; white-space:nowrap; }
+        
         .modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); align-items:center; justify-content:center; z-index:100; backdrop-filter:blur(2px); }
         .m-box { background:#fff; padding:25px; border-radius:20px; width:85%; max-width:320px; text-align:center; box-shadow:0 10px 30px rgba(0,0,0,.25); }
+
+        /* === 漂浮安裝通知條 === */
+        .install-bar { display:none; position:fixed; bottom:20px; left:50%; transform:translateX(-50%); width:92%; max-width:450px; background:#2c3e50; color:#fff; padding:14px 18px; border-radius:16px; box-shadow:0 10px 25px rgba(0,0,0,0.3); z-index:9999; align-items:center; gap:12px; animation: slideUp 0.5s ease; }
+        .i-logo { width:45px; height:45px; border-radius:10px; object-fit:cover; }
+        .i-text { flex:1; display:flex; flex-direction:column; }
+        .i-text strong { font-size:1.05rem; }
+        .i-text span { font-size:0.8rem; color:#bdc3c7; margin-top:2px; }
+        .i-btn { background:#27ae60; color:#fff; border:none; padding:8px 16px; border-radius:50px; font-weight:bold; cursor:pointer; font-size:0.95rem; }
+        .i-btn:active { transform:scale(0.95); }
+        .i-close { padding:5px; color:#7f8c8d; cursor:pointer; font-size:1.2rem; margin-left:5px; font-weight:bold; }
+        @keyframes slideUp { from { bottom:-100px; opacity:0; } to { bottom:20px; opacity:1; } }
     </style>
 </head>
 <body>
@@ -52,8 +68,6 @@
             <div><span>禮包總數</span><strong id="v-cnt">0</strong></div>
             <div><span>總福利</span><strong id="v-pts" style="color:#e74c3c">0</strong></div>
         </div>
-
-        <button id="btn-install" class="btn btn-install" onclick="app.install()">📲 一鍵設定到桌面</button>
 
         <div class="ctrl">
             <button id="b-date" class="on" onclick="app.sort('d')">📅 日期</button>
@@ -66,10 +80,10 @@
         <div style="font-weight:bold;color:#555;margin:15px 0 10px;padding-left:10px;border-left:4px solid #e74c3c;">🔥 最新禮包區</div>
         <div id="list"></div>
 
-        <button class="btn" style="background:#e0e0e0;color:#555;box-shadow:none;margin-top:15px;" onclick="document.getElementById('old').style.display='block'">📂 顯示歷史庫存 ▼</button>
+        <button class="btn" style="background:#e0e0e0;color:#555;box-shadow:none;margin-top:15px;" onclick="document.getElementById('old').style.display='block';this.style.display='none';">📂 顯示歷史庫存 ▼</button>
         <div id="old" style="display:none"></div>
 
-        <div style="text-align:center; margin-top:30px;"><span style="font-size:0.9rem; color:#ccc; cursor:pointer; text-decoration:underline;" onclick="app.reset()">重置紀錄</span></div>
+        <div style="text-align:center; margin-top:40px;"><span style="font-size:0.9rem; color:#ccc; cursor:pointer; text-decoration:underline;" onclick="app.reset()">重置紀錄</span></div>
     </div>
 
     <div id="toast"></div>
@@ -83,28 +97,58 @@
         </div>
     </div>
 
+    <div id="install-bar" class="install-bar">
+        <img src="https://raw.githubusercontent.com/ox0114xo/Gift-code/b9cefb2c764b9b84b111abfddf9df6ec9327a6f5/1771553807683.png" class="i-logo">
+        <div class="i-text">
+            <strong>加到手機桌面</strong>
+            <span id="i-desc">一鍵開啟，免找網址！</span>
+        </div>
+        <button id="i-btn" class="i-btn">安裝</button>
+        <span class="i-close" onclick="document.getElementById('install-bar').style.display='none'">✕</span>
+    </div>
+
     <script>
     // === 設定區 ===
     const SHEET = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSkENoeJW2fV8JucN514cMysAStsgNLzjbYKrE04bDSAJOKTayexd-Ve3Fce4KB6FQsXvtMTgPZ7Mnw/pub?output=csv";
     const CUT = 213; // 新舊禮包分界線
 
-    // === 動態寫入 PWA 條件 (騙過安卓瀏覽器以觸發一鍵安裝) ===
+    // === 動態寫入 PWA 條件 (觸發安卓一鍵安裝) ===
     const icon = "https://raw.githubusercontent.com/ox0114xo/Gift-code/b9cefb2c764b9b84b111abfddf9df6ec9327a6f5/1771553807683.png";
     document.getElementById('pwa-manifest').href = 'data:application/manifest+json;utf-8,'+encodeURIComponent(JSON.stringify({name:"禮包助手",short_name:"禮包",start_url:".",display:"standalone",background_color:"#f2f4f7",icons:[{src:icon,sizes:"192x192",type:"image/png"}]}));
     if('serviceWorker' in navigator) navigator.serviceWorker.register(URL.createObjectURL(new Blob(["self.addEventListener('fetch',e=>{});"], {type:'text/javascript'})));
 
-    // === 安裝邏輯 ===
-    let promptEvt;
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-    
-    window.addEventListener('beforeinstallprompt', e => {
-        e.preventDefault(); promptEvt = e;
-        if(!isStandalone) document.getElementById('btn-install').style.display = 'block'; // 安卓觸發成功
-    });
-    
-    // 若為 iOS 或未觸發的瀏覽器，且不在 APP 模式，依然顯示按鈕（點擊後給提示）
-    if(!isStandalone && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        setTimeout(() => document.getElementById('btn-install').style.display = 'block', 500);
+    // === 安裝通知邏輯 ===
+    let defPrompt;
+    const isApp = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+    const iBar = document.getElementById('install-bar');
+    const iBtn = document.getElementById('i-btn');
+    const iDesc = document.getElementById('i-desc');
+
+    if (!isApp) {
+        // 安卓系統：擷取系統安裝事件
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            defPrompt = e;
+            iBar.style.display = 'flex'; // 顯示通知
+            
+            iBtn.onclick = () => {
+                defPrompt.prompt();
+                defPrompt.userChoice.then((choice) => {
+                    if (choice.outcome === 'accepted') iBar.style.display = 'none';
+                    defPrompt = null;
+                });
+            };
+        });
+
+        // 蘋果系統：延遲跳出文字引導
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        if (isIOS) {
+            setTimeout(() => {
+                iBar.style.display = 'flex';
+                iDesc.innerHTML = "點擊底部的 <b>分享⍗</b> 加到主畫面";
+                iBtn.style.display = 'none'; // iOS 隱藏安裝按鈕
+            }, 800);
+        }
     }
 
     // === 核心程式 ===
@@ -158,17 +202,7 @@
         msg(m) { let t=document.getElementById('toast'); t.innerText=m; t.classList.add('show'); t.style.bottom='40px'; setTimeout(()=>{t.style.bottom='-50px'; t.classList.remove('show');},2000); },
         op(c) { this.tId=c; document.getElementById('mod').style.display='flex'; },
         rep(t) { this.st.b[this.tId]=t; this.sv(); document.getElementById('mod').style.display='none'; this.cp('回報：序號 '+this.tId+' 已'+t); },
-        reset() { if(confirm('確定清空所有紀錄？')){ localStorage.removeItem('gData'); location.reload(); } },
-        install() {
-            if(promptEvt) { 
-                promptEvt.prompt(); 
-                promptEvt.userChoice.then(r=>{ if(r.outcome==='accepted') document.getElementById('btn-install').style.display='none'; promptEvt=null; }); 
-            } else if(/iPhone|iPad|iPod/i.test(navigator.userAgent)) { 
-                alert("🍎 蘋果系統安全限制，無法「直接一鍵」安裝喔！\n\n👉 請點擊螢幕下方導覽列的「分享 ⍗」\n👉 然後選擇「加到主畫面 ⊞」即可！"); 
-            } else {
-                alert("🤖 請點擊瀏覽器右上角選單 (⋮)\n👉 選擇「加到主畫面」或「安裝」即可！");
-            }
-        }
+        reset() { if(confirm('確定清空所有紀錄？')){ localStorage.removeItem('gData'); location.reload(); } }
     };
     app.init();
     </script>
