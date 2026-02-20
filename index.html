@@ -3,325 +3,174 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
     <title>禮包碼助手</title>
     
-    <link rel="icon" type="image/png" sizes="192x192" href="https://raw.githubusercontent.com/ox0114xo/Gift-code/b9cefb2c764b9b84b111abfddf9df6ec9327a6f5/1771553807683.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="https://raw.githubusercontent.com/ox0114xo/Gift-code/b9cefb2c764b9b84b111abfddf9df6ec9327a6f5/1771553807683.png">
-    <link rel="shortcut icon" href="https://raw.githubusercontent.com/ox0114xo/Gift-code/b9cefb2c764b9b84b111abfddf9df6ec9327a6f5/1771553807683.png">
-    
+    <link rel="icon" href="https://raw.githubusercontent.com/ox0114xo/Gift-code/b9cefb2c764b9b84b111abfddf9df6ec9327a6f5/1771553807683.png">
     <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/ox0114xo/Gift-code/b9cefb2c764b9b84b111abfddf9df6ec9327a6f5/1771553807683.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="https://raw.githubusercontent.com/ox0114xo/Gift-code/b9cefb2c764b9b84b111abfddf9df6ec9327a6f5/1771553807683.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="https://raw.githubusercontent.com/ox0114xo/Gift-code/b9cefb2c764b9b84b111abfddf9df6ec9327a6f5/1771553807683.png">
-    <link rel="apple-touch-icon" sizes="167x167" href="https://raw.githubusercontent.com/ox0114xo/Gift-code/b9cefb2c764b9b84b111abfddf9df6ec9327a6f5/1771553807683.png">
-    
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="禮包助手">
-    <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#f2f4f7">
+    <link rel="manifest" id="pwa-manifest">
 
     <style>
-    /* === 全局重置 === */
-    .gift-root { all: initial; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.5; box-sizing: border-box; width: 100%; display: block; background-color: #f2f4f7 !important; color: #333 !important; }
-    .gift-root * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: inherit; }
-    .gift-container { max-width: 600px; margin: 0 auto; padding: 15px; background-color: #f2f4f7 !important; min-height: 100vh; }
-
-    /* 標題與儀表板 */
-    .gift-header { text-align: center; margin-bottom: 20px; padding-top: 10px; }
-    .gift-title { margin: 0; font-size: 1.8rem !important; color: #2c3e50 !important; font-weight: 900 !important; }
-    .gift-subtitle { color: #7f8c8d !important; font-size: 0.9rem !important; margin-top: 5px; display: block; font-weight: bold; }
-    .g-dashboard { display: flex; gap: 10px; background: #fff !important; padding: 15px; border-radius: 16px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #fff; }
-    .g-item { flex: 1; text-align: center; }
-    .g-label { font-size: 0.85rem !important; color: #95a5a6 !important; display: block; margin-bottom: 5px; font-weight: bold; }
-    .g-val { font-size: 1.5rem !important; font-weight: 900 !important; color: #2c3e50 !important; line-height: 1; }
-    .g-val.red { color: #e74c3c !important; }
-
-    /* 操作按鈕 */
-    .g-controls { display: flex; gap: 8px; margin-bottom: 15px; position: sticky; top: 10px; z-index: 100; background: rgba(242, 244, 247, 0.95); padding: 5px 0; backdrop-filter: blur(5px); }
-    .g-btn { flex: 1; padding: 12px 0; border: none; border-radius: 50px; background: #fff !important; color: #555 !important; font-weight: bold !important; font-size: 0.95rem !important; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: transform 0.1s; display: flex; align-items: center; justify-content: center; gap: 4px; }
-    .g-btn.active { background: #2c3e50 !important; color: #fff !important; box-shadow: 0 4px 12px rgba(44, 62, 80, 0.3); }
-    .g-btn:active { transform: scale(0.96); }
-
-    /* 複製清單按鈕 */
-    .copy-all-btn { width: 100%; padding: 14px; background: linear-gradient(135deg, #e67e22, #f39c12) !important; color: #fff !important; border: none; border-radius: 12px; font-weight: bold !important; font-size: 1rem !important; margin-bottom: 20px; cursor: pointer; display: block; box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3); text-align: center; }
-    .copy-all-btn:active { transform: scale(0.98); }
-
-    .loading-msg { text-align: center; color: #e67e22; font-weight: bold; padding: 20px; font-size: 1.1rem; }
-
-    /* 列表樣式 */
-    .g-list { display: flex; flex-direction: column; gap: 14px; padding-bottom: 20px; }
-    .g-card { background: #fff !important; padding: 18px; border-radius: 16px; position: relative; border: 1px solid #f0f0f0; box-shadow: 0 2px 10px rgba(0,0,0,0.03); transition: all 0.2s; }
-    .g-card.redeemed { opacity: 0.6; background: #f8f9fa !important; border-color: #e0e0e0; }
-    .g-card.pending { background: #fffcf2 !important; border-color: #ffecb3; }
-    .g-card.reported { opacity: 0.7; background: #fff5f5 !important; border-color: #ffc9c9; }
-    .tag { position: absolute; top: 0; right: 0; padding: 4px 10px; font-size: 0.75rem !important; border-bottom-left-radius: 12px; border-top-right-radius: 16px; font-weight: bold; }
-    .tag.pending { background: #ffeeba !important; color: #b7791f !important; }
-    .tag.reported { background: #ffcccc !important; color: #c0392b !important; }
-    .g-top { display: flex; justify-content: space-between; margin-bottom: 12px; align-items: center; }
-    .g-points { color: #e74c3c !important; font-weight: 800 !important; font-size: 1.3rem !important; letter-spacing: -0.5px; }
-    .g-date { background: #eee !important; padding: 3px 8px; border-radius: 6px; font-size: 0.8rem !important; margin-left: 8px; color: #555 !important; font-weight: bold; }
-    .g-note { color: #888 !important; font-size: 0.9rem !important; max-width: 60%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: right; }
-
-    .g-code { background: #ebf5ff !important; color: #007bff !important; border: 2px dashed #a6cfff !important; padding: 14px; text-align: center; border-radius: 10px; font-family: "Courier New", monospace !important; font-size: 1.4rem !important; font-weight: bold !important; cursor: pointer; margin-bottom: 12px; user-select: all; letter-spacing: 1px; }
-    .g-code:active { background: #d6eaff !important; transform: scale(0.98); }
-    .g-actions { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f5f5f5; padding-top: 12px; }
-    .g-act-btn { font-size: 0.85rem !important; color: #999 !important; cursor: pointer; padding: 6px 10px; border-radius: 8px; background: #f9f9f9; display: flex; align-items: center; gap: 4px; }
-    .g-act-btn.pending { color: #d35400 !important; background: #fff8e1 !important; }
-    .g-check { display: flex; align-items: center; gap: 8px; font-size: 0.95rem !important; color: #555 !important; cursor: pointer; padding: 5px; font-weight: 500; }
-    .g-check input { width: 22px; height: 22px; accent-color: #27ae60; cursor: pointer; }
-
-    /* 提示框與分隔線 */
-    #g-toast { visibility: hidden; position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); background: rgba(30, 30, 30, 0.9); color: #fff; padding: 12px 24px; border-radius: 50px; font-size: 1rem; z-index: 9999; box-shadow: 0 5px 20px rgba(0,0,0,0.2); white-space: nowrap; opacity: 0; transition: opacity 0.3s; }
-    #g-toast.show { visibility: visible; opacity: 1; bottom: 60px; }
-    .g-divider { display: block; width: 100%; padding: 16px; margin-top: 25px; margin-bottom: 15px; background: #e0e0e0 !important; color: #555 !important; border: none; border-radius: 12px; font-weight: bold !important; font-size: 1rem !important; cursor: pointer; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-    .g-divider:active { background: #d0d0d0 !important; transform: scale(0.98); }
-    .g-sec-title { font-size: 1rem !important; font-weight: bold !important; color: #555 !important; margin: 20px 0 10px 0; padding-left: 5px; border-left: 4px solid #e74c3c; line-height: 1.2; padding-left: 10px; }
-    #old-list { display: none; margin-top: 10px; flex-direction: column; gap: 14px; }
-
-    /* 彈窗 */
-    .modal-mask { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
-    .modal-mask.open { display: flex; }
-    .modal-body { background: #fff; padding: 25px; border-radius: 20px; width: 85%; max-width: 320px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.25); }
-    .modal-body h3 { margin: 0 0 15px; color: #333; font-size: 1.2rem; }
-    .modal-desc { margin-bottom: 20px; color: #555; font-size: 0.95rem; line-height: 1.6; text-align: left; background: #f8f9fa; padding: 15px; border-radius: 12px; }
-    .m-btn { display: block; width: 100%; padding: 14px; margin-bottom: 12px; border-radius: 12px; border: 1px solid #eee; font-size: 1rem; font-weight: bold; cursor: pointer; background: #fff; color: #555; }
-    .m-btn.red { background: #fff5f5 !important; color: #e74c3c !important; border-color: #ffcccc; }
-    .m-btn.blue { background: #ebf5ff !important; color: #007bff !important; border-color: #a6cfff; }
+        /* 極簡化 CSS */
+        body,html { margin:0; padding:0; font-family:-apple-system,BlinkMacSystemFont,sans-serif; background:#f2f4f7; color:#333; user-select:none; }
+        * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+        .wrap { max-width:600px; margin:0 auto; padding:15px; min-height:100vh; }
+        h2 { text-align:center; color:#2c3e50; margin:5px 0 20px; font-size:1.8rem; font-weight:900; }
+        .dash { display:flex; background:#fff; padding:15px; border-radius:16px; margin-bottom:15px; text-align:center; box-shadow:0 4px 10px rgba(0,0,0,.05); }
+        .dash div { flex:1; }
+        .dash span { font-size:.85rem; color:#95a5a6; font-weight:700; }
+        .dash strong { display:block; font-size:1.5rem; color:#2c3e50; font-weight:900; }
+        .btn { width:100%; padding:14px; border:none; border-radius:12px; font-weight:bold; font-size:1.05rem; cursor:pointer; margin-bottom:15px; }
+        .btn-install { background:linear-gradient(135deg, #2ecc71, #27ae60); color:#fff; box-shadow:0 4px 15px rgba(46,204,113,.3); display:none; }
+        .ctrl { display:flex; gap:8px; margin-bottom:15px; position:sticky; top:10px; z-index:10; background:rgba(242,244,247,.95); padding:5px 0; backdrop-filter:blur(5px); }
+        .ctrl button { flex:1; padding:12px 0; border:none; border-radius:50px; background:#fff; font-weight:bold; color:#555; box-shadow:0 2px 8px rgba(0,0,0,.08); cursor:pointer; }
+        .ctrl button.on { background:#2c3e50; color:#fff; }
+        .card { background:#fff; padding:18px; border-radius:16px; margin-bottom:12px; position:relative; border:1px solid #f0f0f0; }
+        .card.r { opacity:.6; background:#f8f9fa; }
+        .card.p { background:#fffcf2; }
+        .card.b { opacity:.7; background:#fff5f5; }
+        .c-top { display:flex; justify-content:space-between; margin-bottom:12px; align-items:center; }
+        .c-top strong { color:#e74c3c; font-size:1.3rem; font-weight:800; }
+        .c-top span { background:#eee; padding:3px 8px; border-radius:6px; font-size:.8rem; margin-left:8px; font-weight:bold; color:#555; }
+        .note { color:#888; font-size:.9rem; max-width:60%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; text-align:right;}
+        .code { background:#ebf5ff; color:#007bff; border:2px dashed #a6cfff; padding:14px; text-align:center; border-radius:10px; font-family:monospace; font-size:1.4rem; font-weight:bold; margin-bottom:12px; cursor:pointer; user-select:all; }
+        .acts { display:flex; justify-content:space-between; border-top:1px solid #eee; padding-top:12px; align-items:center; }
+        .acts a { color:#999; font-size:.85rem; padding:6px 10px; background:#f9f9f9; border-radius:8px; cursor:pointer; }
+        label { display:flex; align-items:center; gap:8px; font-weight:bold; color:#555; cursor:pointer; }
+        input[type="checkbox"] { width:22px; height:22px; accent-color:#27ae60; cursor:pointer; }
+        #toast { position:fixed; bottom:-50px; left:50%; transform:translateX(-50%); background:rgba(30,30,30,.9); color:#fff; padding:12px 24px; border-radius:50px; transition:.3s; z-index:99; font-weight:bold; white-space:nowrap; }
+        .modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); align-items:center; justify-content:center; z-index:100; backdrop-filter:blur(2px); }
+        .m-box { background:#fff; padding:25px; border-radius:20px; width:85%; max-width:320px; text-align:center; box-shadow:0 10px 30px rgba(0,0,0,.25); }
     </style>
 </head>
 <body>
-
-<div class="gift-root">
-    <div class="gift-container">
+    <div class="wrap">
+        <h2>禮包碼助手</h2>
         
-        <div class="gift-header">
-            <h2 class="gift-title">禮包碼助手</h2>
-            <span class="gift-subtitle">一鍵複製 &bull; 自動同步雲端庫</span>
+        <div class="dash">
+            <div><span>禮包總數</span><strong id="v-cnt">0</strong></div>
+            <div><span>總福利</span><strong id="v-pts" style="color:#e74c3c">0</strong></div>
         </div>
 
-        <div class="g-dashboard">
-            <div class="g-item">
-                <span class="g-label">禮包總數</span>
-                <div class="g-val" id="d-count">0</div>
-            </div>
-            <div class="g-item">
-                <span class="g-label">總福利</span>
-                <div class="g-val red" id="d-points">0</div>
-            </div>
+        <button id="btn-install" class="btn btn-install" onclick="app.install()">📲 一鍵設定到桌面</button>
+
+        <div class="ctrl">
+            <button id="b-date" class="on" onclick="app.sort('d')">📅 日期</button>
+            <button id="b-pts" onclick="app.sort('p')">💰 點數</button>
+            <button id="b-fil" onclick="app.filt()">📋 未領</button>
         </div>
 
-        <div class="g-controls">
-            <button class="g-btn active" id="btn-date" onclick="window.GiftApp.sort('date')">📅 日期</button>
-            <button class="g-btn" id="btn-points" onclick="window.GiftApp.sort('points')">💰 點數</button>
-            <button class="g-btn" id="btn-filter" onclick="window.GiftApp.toggleFilter()">📋 未領</button>
-        </div>
-
-        <button class="copy-all-btn" onclick="window.GiftApp.copyList()">💰 複製社團推廣文案</button>
-
-        <div id="loading-msg" class="loading-msg">🔄 正在連線讀取最新禮包...</div>
-
-        <div class="g-sec-title">🔥 最新禮包區</div>
-        <div id="new-list" class="g-list"></div>
-
-        <button id="toggle-btn" class="g-divider" onclick="window.GiftApp.toggleOld()">📂 查看歷史庫存 ▼</button>
-        <div id="old-list"></div>
+        <div id="loading" style="text-align:center;color:#e67e22;font-weight:bold;padding:20px;">🔄 連線讀取中...</div>
         
-        <div style="text-align:center; margin-top:40px; padding-bottom:40px;">
-            <span style="font-size:0.9rem; color:#ccc; cursor:pointer; text-decoration:underline;" onclick="window.GiftApp.reset()">重置所有紀錄</span>
+        <div style="font-weight:bold;color:#555;margin:15px 0 10px;padding-left:10px;border-left:4px solid #e74c3c;">🔥 最新禮包區</div>
+        <div id="list"></div>
+
+        <button class="btn" style="background:#e0e0e0;color:#555;box-shadow:none;margin-top:15px;" onclick="document.getElementById('old').style.display='block'">📂 顯示歷史庫存 ▼</button>
+        <div id="old" style="display:none"></div>
+
+        <div style="text-align:center; margin-top:30px;"><span style="font-size:0.9rem; color:#ccc; cursor:pointer; text-decoration:underline;" onclick="app.reset()">重置紀錄</span></div>
+    </div>
+
+    <div id="toast"></div>
+
+    <div id="mod" class="modal">
+        <div class="m-box">
+            <h3 style="margin-top:0;margin-bottom:20px;color:#333;">回報失效</h3>
+            <button class="btn" style="background:#fff5f5;color:#e74c3c;border:1px solid #ffcccc;box-shadow:none;" onclick="app.rep('過期')">📅 已過期</button>
+            <button class="btn" style="background:#fff5f5;color:#e74c3c;border:1px solid #ffcccc;box-shadow:none;" onclick="app.rep('領完')">😫 已領完</button>
+            <button class="btn" style="background:#fff;color:#555;border:1px solid #eee;box-shadow:none;margin-bottom:0;" onclick="document.getElementById('mod').style.display='none'">取消</button>
         </div>
     </div>
-</div>
 
-<div id="g-toast"></div>
+    <script>
+    // === 設定區 ===
+    const SHEET = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSkENoeJW2fV8JucN514cMysAStsgNLzjbYKrE04bDSAJOKTayexd-Ve3Fce4KB6FQsXvtMTgPZ7Mnw/pub?output=csv";
+    const CUT = 213; // 新舊禮包分界線
 
-<div id="modal" class="modal-mask">
-    <div class="modal-body">
-        <h3>回報問題</h3>
-        <button class="m-btn red" onclick="window.GiftApp.confirmReport('expired')">📅 已經過期</button>
-        <button class="m-btn red" onclick="window.GiftApp.confirmReport('empty')">😫 已經被領完</button>
-        <button class="m-btn" onclick="window.GiftApp.closeModal()">取消</button>
-    </div>
-</div>
+    // === 動態寫入 PWA 條件 (騙過安卓瀏覽器以觸發一鍵安裝) ===
+    const icon = "https://raw.githubusercontent.com/ox0114xo/Gift-code/b9cefb2c764b9b84b111abfddf9df6ec9327a6f5/1771553807683.png";
+    document.getElementById('pwa-manifest').href = 'data:application/manifest+json;utf-8,'+encodeURIComponent(JSON.stringify({name:"禮包助手",short_name:"禮包",start_url:".",display:"standalone",background_color:"#f2f4f7",icons:[{src:icon,sizes:"192x192",type:"image/png"}]}));
+    if('serviceWorker' in navigator) navigator.serviceWorker.register(URL.createObjectURL(new Blob(["self.addEventListener('fetch',e=>{});"], {type:'text/javascript'})));
 
-<div id="install-modal" class="modal-mask">
-    <div class="modal-body">
-        <h3 id="install-title">🚀 加到主畫面</h3>
-        <div id="install-desc" class="modal-desc"></div>
-        <button class="m-btn blue" onclick="window.GiftApp.closeInstall()">我已經加好了</button>
-    </div>
-</div>
-
-<script>
-// ==========================================
-// ⚙️ 系統設定區
-// ==========================================
-
-var SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSkENoeJW2fV8JucN514cMysAStsgNLzjbYKrE04bDSAJOKTayexd-Ve3Fce4KB6FQsXvtMTgPZ7Mnw/pub?output=csv"; 
-
-var CUTOFF_DATE = 213; 
-var PROMO_SLOGAN = "財源廣進 初四贏麻了"; 
-
-// ==========================================
-
-window.GiftApp = (function() {
-    var raw = [];
-    var st = { r:[], p:[], b:{}, sort:'date', dir:1, filter:false, target:null };
-
-    function detectOS() {
-        var ua = navigator.userAgent || navigator.vendor || window.opera;
-        if (/android/i.test(ua)) return 'Android';
-        if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) return 'iOS';
-        return 'Other';
+    // === 安裝邏輯 ===
+    let promptEvt;
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+    
+    window.addEventListener('beforeinstallprompt', e => {
+        e.preventDefault(); promptEvt = e;
+        if(!isStandalone) document.getElementById('btn-install').style.display = 'block'; // 安卓觸發成功
+    });
+    
+    // 若為 iOS 或未觸發的瀏覽器，且不在 APP 模式，依然顯示按鈕（點擊後給提示）
+    if(!isStandalone && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        setTimeout(() => document.getElementById('btn-install').style.display = 'block', 500);
     }
 
-    function autoShowInstall() {
-        var isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-        var hasSeen = localStorage.getItem('hideInstallAlert_v2'); // 更新緩存名稱確保會跳出
-        
-        if (!isStandalone && !hasSeen) {
-            setTimeout(function() {
-                var os = detectOS();
-                var desc = document.getElementById('install-desc');
-                if (os === 'iOS') {
-                    desc.innerHTML = "把助手變 APP 超方便！<br><br>1. 點擊底下導覽列的「<b>分享 <span style='font-size:1.2rem'>⍗</span></b>」<br>2. 選擇「<b>加到主畫面 <span style='font-size:1.2rem'>⊞</span></b>」";
-                } else if (os === 'Android') {
-                    desc.innerHTML = "把助手變 APP 超方便！<br><br>1. 點擊右上角「<b>三個點 <span style='font-size:1.2rem'>⋮</span></b>」<br>2. 選擇「<b>加到主畫面</b>」";
-                } else {
-                    return; // 電腦版不跳通知
+    // === 核心程式 ===
+    const app = {
+        d: [], st: JSON.parse(localStorage.getItem('gData')) || { r:[], p:[], b:{}, s:'d', asc:false, f:false }, tId: null,
+        init() {
+            fetch(SHEET).then(r=>r.text()).then(c=>{
+                document.getElementById('loading').style.display='none';
+                let l = c.split(/\r?\n/);
+                for(let i=1; i<l.length; i++){
+                    let row = l[i].split(',');
+                    if(row[2]) this.d.push({ d:row[0].trim(), p:+row[1], c:row[2].trim(), n:row[3]||"" });
                 }
-                document.getElementById('install-modal').className = 'modal-mask open';
-            }, 1000); // 網頁載入後 1 秒跳出
-        }
-    }
-
-    function init() {
-        var s = localStorage.getItem('gift_data_v4');
-        if(s) { try { st = JSON.parse(s); } catch(e){} }
-        if(!Array.isArray(st.r)) st.r=[]; if(!Array.isArray(st.p)) st.p=[]; if(typeof st.b!=='object') st.b={};
-        
-        autoShowInstall(); // 呼叫自動通知功能
-        
-        // 抓取 Google 試算表資料
-        fetch(SHEET_CSV_URL)
-            .then(function(response) {
-                if(!response.ok) throw new Error("網路連線錯誤");
-                return response.text();
-            })
-            .then(function(csvText) {
-                document.getElementById('loading-msg').style.display = 'none';
-                raw = parseCSV(csvText);
-                if(raw.length === 0) {
-                    document.getElementById('loading-msg').style.display = 'block';
-                    document.getElementById('loading-msg').innerHTML = "⚠️ 讀不到資料！<br><span style='font-size:0.9rem; color:#888;'>請確認 Google 試算表已開啟「發布到網路(CSV)」設定</span>";
-                }
-                render();
-            })
-            .catch(function(err) {
-                document.getElementById('loading-msg').innerHTML = '⚠️ 讀取失敗，請確認網址正確或重新整理。';
-                console.error(err);
+                this.rnd();
+            }).catch(()=>document.getElementById('loading').innerText='⚠️ 資料讀取失敗');
+        },
+        sv() { localStorage.setItem('gData', JSON.stringify(this.st)); this.rnd(); },
+        pd(d) { let a=d.split('/'); return a[0]*100 + +a[1]; },
+        rnd() {
+            let pts=0, a=this.d.filter(x=>{ pts+=x.p; return !this.st.f || (!this.st.r.includes(x.c) && !this.st.b[x.c]); });
+            document.getElementById('v-cnt').innerText = this.d.length;
+            document.getElementById('v-pts').innerText = pts;
+            a.sort((x,y) => this.st.s==='d' ? (this.st.asc ? this.pd(x.d)-this.pd(y.d) : this.pd(y.d)-this.pd(x.d)) : (this.st.asc ? x.p-y.p : y.p-x.p));
+            
+            let hN='', hO='';
+            a.forEach(x => {
+                let isR=this.st.r.includes(x.c), isP=this.st.p.includes(x.c), isB=!!this.st.b[x.c];
+                let cls = isB?'b':isR?'r':isP?'p':'';
+                let tag = isB?'<div class="tag b" style="position:absolute;top:0;right:0;padding:4px 10px;font-size:0.75rem;border-radius:0 16px 0 12px;background:#ffcccc;color:#c0392b;font-weight:bold;">⚠️ 失效</div>' : 
+                          isP?'<div class="tag p" style="position:absolute;top:0;right:0;padding:4px 10px;font-size:0.75rem;border-radius:0 16px 0 12px;background:#ffeeba;color:#b7791f;font-weight:bold;">⏳ 暫存</div>' : '';
+                
+                let h = `<div class="card ${cls}">${tag}<div class="c-top"><div><strong>💰${x.p}</strong><span>${x.d}</span></div><div class="note">${x.n}</div></div><div class="code" onclick="app.cp('${x.c}')">${x.c}</div><div class="acts"><div style="display:flex;gap:8px"><a onclick="app.op('${x.c}')">⚠️回報</a><a onclick="app.tp('${x.c}')" style="color:${isP?'#d35400':'#999'}">⏳資格未符</a></div><label><input type="checkbox" onchange="app.tr('${x.c}',this.checked)" ${isR?'checked':''}>已領</label></div></div>`;
+                this.pd(x.d)>=CUT ? hN+=h : hO+=h;
             });
-    }
-
-    function parseCSV(text) {
-        var arr = [];
-        var lines = text.split(/\r?\n/);
-        for(var i=1; i<lines.length; i++) {
-            if(!lines[i].trim()) continue;
-            var cols = lines[i].split(',');
-            if(cols.length >= 3) {
-                var d = cols[0].trim();
-                var p = parseInt(cols[1].trim()) || 0;
-                var c = cols[2].trim();
-                var n = cols[3] ? cols[3].trim() : "";
-                if(c !== "") arr.push({d: d, p: p, c: c, n: n});
+            document.getElementById('list').innerHTML = hN||'<div style="text-align:center;padding:20px;color:#999">無資料</div>';
+            document.getElementById('old').innerHTML = hO||'<div style="text-align:center;padding:20px;color:#999">無資料</div>';
+            
+            document.getElementById('b-date').className=this.st.s==='d'?'on':'';
+            document.getElementById('b-pts').className=this.st.s==='p'?'on':'';
+            document.getElementById('b-fil').className=this.st.f?'on':'';
+        },
+        sort(k) { this.st.asc = (this.st.s===k) ? !this.st.asc : false; this.st.s=k; this.sv(); },
+        filt() { this.st.f = !this.st.f; this.sv(); },
+        tr(c, v) { v ? (this.st.r.push(c), this.st.p=this.st.p.filter(x=>x!==c)) : this.st.r=this.st.r.filter(x=>x!==c); this.sv(); },
+        tp(c) { this.st.p.includes(c) ? this.st.p=this.st.p.filter(x=>x!==c) : this.st.p.push(c); this.sv(); },
+        cp(c) { 
+            if(this.st.b[c]) return this.msg('⚠️ 該序號已回報失效'); 
+            let e=document.createElement('textarea'); e.value=c; document.body.appendChild(e); e.select(); document.execCommand('copy'); e.remove();
+            this.msg('✅ 已複製並標記領取'); this.tr(c,true); 
+        },
+        msg(m) { let t=document.getElementById('toast'); t.innerText=m; t.classList.add('show'); t.style.bottom='40px'; setTimeout(()=>{t.style.bottom='-50px'; t.classList.remove('show');},2000); },
+        op(c) { this.tId=c; document.getElementById('mod').style.display='flex'; },
+        rep(t) { this.st.b[this.tId]=t; this.sv(); document.getElementById('mod').style.display='none'; this.cp('回報：序號 '+this.tId+' 已'+t); },
+        reset() { if(confirm('確定清空所有紀錄？')){ localStorage.removeItem('gData'); location.reload(); } },
+        install() {
+            if(promptEvt) { 
+                promptEvt.prompt(); 
+                promptEvt.userChoice.then(r=>{ if(r.outcome==='accepted') document.getElementById('btn-install').style.display='none'; promptEvt=null; }); 
+            } else if(/iPhone|iPad|iPod/i.test(navigator.userAgent)) { 
+                alert("🍎 蘋果系統安全限制，無法「直接一鍵」安裝喔！\n\n👉 請點擊螢幕下方導覽列的「分享 ⍗」\n👉 然後選擇「加到主畫面 ⊞」即可！"); 
+            } else {
+                alert("🤖 請點擊瀏覽器右上角選單 (⋮)\n👉 選擇「加到主畫面」或「安裝」即可！");
             }
         }
-        return arr;
-    }
-
-    function save() { localStorage.setItem('gift_data_v4', JSON.stringify(st)); render(); }
-
-    function render() {
-        var nL = document.getElementById('new-list'), oL = document.getElementById('old-list');
-        if(!nL || !oL) return;
-        
-        var total = 0; raw.forEach(function(i){ total += i.p; });
-        document.getElementById('d-count').innerText = raw.length;
-        document.getElementById('d-points').innerText = total.toLocaleString();
-        
-        var list = raw.slice();
-        if(st.filter) list = list.filter(function(i){ return st.r.indexOf(i.c) < 0 && !st.b[i.c]; });
-        
-        list.sort(function(a, b){
-            if(st.sort === 'date') { var da = parseD(a.d), db = parseD(b.d); return st.dir === 1 ? db - da : da - db; }
-            else { return st.dir === 1 ? b.p - a.p : a.p - b.p; }
-        });
-        
-        var nH = '', oH = ''; var hasN=false, hasO=false;
-        list.forEach(function(i) {
-            var isR = st.r.indexOf(i.c) >= 0, isP = st.p.indexOf(i.c) >= 0, isB = !!st.b[i.c];
-            var cls = 'g-card'; var tag = '';
-            if(isB) { cls+=' reported'; tag='<div class="tag reported">⚠️ 失效</div>'; }
-            else if(isR) { cls+=' redeemed'; }
-            else if(isP) { cls+=' pending'; tag='<div class="tag pending">⏳ 暫存</div>'; }
-            var html = '<div class="'+cls+'">'+tag+'<div class="g-top"><div><span class="g-points">💰'+i.p+'</span><span class="g-date">'+i.d+'</span></div><div class="g-note">'+i.n+'</div></div><div class="g-code" onclick="window.GiftApp.copy(\''+i.c+'\')">'+i.c+'</div><div class="g-actions"><div style="display:flex;gap:8px;"><div class="g-act-btn" onclick="window.GiftApp.openModal(\''+i.c+'\')">⚠️ 回報</div><div class="g-act-btn '+(isP?'pending':'')+'" onclick="window.GiftApp.togP(\''+i.c+'\')">⏳ 資格未符</div></div><label class="g-check"><input type="checkbox" onchange="window.GiftApp.togR(\''+i.c+'\',this.checked)" '+(isR?'checked':'')+'> 已領</label></div></div>';
-            
-            if(parseD(i.d) >= CUTOFF_DATE) { nH += html; hasN = true; } else { oH += html; hasO = true; }
-        });
-        nL.innerHTML = hasN ? nH : '<div style="text-align:center;padding:20px;color:#999;">🎉 暫無新禮包</div>';
-        oL.innerHTML = hasO ? oH : '<div style="text-align:center;padding:20px;color:#999;">📭 暫無庫存</div>';
-        updBtn();
-    }
-
-    function parseD(d) { var p = d.split('/'); return (parseInt(p[0]) * 100) + parseInt(p[1]); }
-    function updBtn() {
-        var arr = st.dir === 1 ? '↓' : '↑';
-        document.getElementById('btn-date').innerText = '📅 日期 ' + (st.sort==='date'?arr:'');
-        document.getElementById('btn-date').className = st.sort==='date'?'g-btn active':'g-btn';
-        document.getElementById('btn-points').innerText = '💰 點數 ' + (st.sort==='points'?arr:'');
-        document.getElementById('btn-points').className = st.sort==='points'?'g-btn active':'g-btn';
-        document.getElementById('btn-filter').className = st.filter?'g-btn active':'g-btn';
-    }
-    function toast(m) { var t = document.getElementById('g-toast'); t.innerText = m; t.className = 'show'; setTimeout(function(){ t.className = ''; }, 2000); }
-    function copyToClip(txt) { var el = document.createElement('textarea'); el.value = txt; document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el); }
-
-    return {
-        init: init,
-        reset: function() { if(confirm('確定要清空所有紀錄嗎？')) { localStorage.removeItem('gift_data_v4'); localStorage.removeItem('hideInstallAlert_v2'); location.reload(); } },
-        sort: function(t) { if(st.sort===t) st.dir*=-1; else { st.sort=t; st.dir=1; } render(); },
-        toggleFilter: function() { st.filter=!st.filter; render(); },
-        toggleOld: function() {
-            var el = document.getElementById('old-list');
-            var btn = document.getElementById('toggle-btn');
-            if(el.style.display === 'flex') { el.style.display = 'none'; btn.innerText = '📂 查看歷史庫存 ▼'; } 
-            else { el.style.display = 'flex'; btn.innerText = '📂 收起歷史庫存 ▲'; }
-        },
-        togR: function(c, v) {
-            if(v) { if(st.r.indexOf(c)<0) st.r.push(c); var i=st.p.indexOf(c); if(i>=0) st.p.splice(i,1); } else { var i=st.r.indexOf(c); if(i>=0) st.r.splice(i,1); } save();
-        },
-        togP: function(c) { var i = st.p.indexOf(c); if(i>=0) st.p.splice(i,1); else st.p.push(c); save(); },
-        copy: function(c) { if(st.b[c]) { toast('⚠️ 該序號已回報失效'); return; } copyToClip(c); toast('✅ 已複製並標記領取'); this.togR(c, true); },
-        copyList: function() {
-            var txt = "🔥🔥【禮包碼整理神器】🔥🔥\n各位老闆久等了！福利序號都在這裡～\n不用再手動輸入到手痠 😫\n\n點擊下方連結 👇\n裡面有最新的「一鍵複製」功能 ✅\n自動幫你整理好所有序號，超級方便！\n趕快點進去領取吧 🎁\n\n傳送門在此 ▶️ ppt.cc/fDXaPx\n\n(領取後記得回覆：" + PROMO_SLOGAN + ")";
-            copyToClip(txt); toast('💰 社團文案已複製');
-        },
-        openModal: function(c) { st.target = c; document.getElementById('modal').className = 'modal-mask open'; },
-        closeModal: function() { document.getElementById('modal').className = 'modal-mask'; st.target = null; },
-        confirmReport: function(type) {
-            if(!st.target) return; st.b[st.target] = type; save();
-            var reason = type==='expired' ? '過期' : '領完';
-            copyToClip('回報：序號 ' + st.target + ' 已' + reason);
-            this.closeModal(); toast('✅ 已標記失效');
-        },
-        closeInstall: function() {
-            document.getElementById('install-modal').className = 'modal-mask';
-            // 記錄用戶已看過，以後就不再跳出通知
-            localStorage.setItem('hideInstallAlert_v2', 'true'); 
-        }
     };
-})();
-if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', window.GiftApp.init); } else { window.GiftApp.init(); }
-</script>
+    app.init();
+    </script>
 </body>
 </html>
