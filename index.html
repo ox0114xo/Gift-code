@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>贏麻了禮包碼</title>
+    <title>贏麻小助手</title>
     
     <link rel="icon" href="https://raw.githubusercontent.com/ox0114xo/Gift-code/b9cefb2c764b9b84b111abfddf9df6ec9327a6f5/1771553807683.png">
     <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/ox0114xo/Gift-code/b9cefb2c764b9b84b111abfddf9df6ec9327a6f5/1771553807683.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-title" content="贏麻了禮包碼">
+    <meta name="apple-mobile-web-app-title" content="贏麻小助手">
     <meta name="theme-color" content="#f2f4f7">
     <link rel="manifest" id="pwa-manifest">
 
@@ -63,7 +63,7 @@
 </head>
 <body>
     <div class="wrap">
-        <h2>贏麻了禮包碼</h2>
+        <h2>贏麻小助手</h2>
         
         <div class="dash">
             <div><span>禮包總數</span><strong id="v-cnt">0</strong></div>
@@ -115,7 +115,7 @@
 
     // === 動態寫入 PWA 條件 (觸發安卓一鍵安裝) ===
     const icon = "https://raw.githubusercontent.com/ox0114xo/Gift-code/b9cefb2c764b9b84b111abfddf9df6ec9327a6f5/1771553807683.png";
-    document.getElementById('pwa-manifest').href = 'data:application/manifest+json;utf-8,'+encodeURIComponent(JSON.stringify({name:"贏麻了禮包碼",short_name:"贏麻了",start_url:".",display:"standalone",background_color:"#f2f4f7",icons:[{src:icon,sizes:"192x192",type:"image/png"}]}));
+    document.getElementById('pwa-manifest').href = 'data:application/manifest+json;utf-8,'+encodeURIComponent(JSON.stringify({name:"贏麻小助手",short_name:"贏麻小助手",start_url:".",display:"standalone",background_color:"#f2f4f7",icons:[{src:icon,sizes:"192x192",type:"image/png"}]}));
     if('serviceWorker' in navigator) navigator.serviceWorker.register(URL.createObjectURL(new Blob(["self.addEventListener('fetch',e=>{});"], {type:'text/javascript'})));
 
     // === 安裝通知邏輯 ===
