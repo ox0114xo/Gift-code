@@ -43,9 +43,13 @@
         input[type="checkbox"] { width:22px; height:22px; accent-color:#27ae60; cursor:pointer; }
         
         .btn { width:100%; padding:14px; border:none; border-radius:12px; font-weight:bold; font-size:1.05rem; cursor:pointer; margin-bottom:15px; }
-        /* 一鍵複製所有序號按鈕樣式 */
-        .btn-copy-all { background:linear-gradient(135deg, #8e44ad, #9b59b6); color:#fff; box-shadow:0 4px 15px rgba(142,68,173,.3); margin-bottom:20px; }
-        .btn-copy-all:active { transform:scale(0.98); }
+        
+        /* 雙按鈕排版與樣式 */
+        .copy-btns { display:flex; gap:10px; margin-bottom:20px; }
+        .copy-btns .btn { margin-bottom:0; flex:1; font-size:0.95rem; padding:12px 0; }
+        .btn-new { background:linear-gradient(135deg, #e74c3c, #c0392b); color:#fff; box-shadow:0 4px 15px rgba(231,76,60,.3); }
+        .btn-old { background:linear-gradient(135deg, #7f8c8d, #95a5a6); color:#fff; box-shadow:0 4px 15px rgba(127,140,141,.3); }
+        .btn-new:active, .btn-old:active { transform:scale(0.96); }
 
         #toast { position:fixed; bottom:-50px; left:50%; transform:translateX(-50%); background:rgba(30,30,30,.9); color:#fff; padding:12px 24px; border-radius:50px; transition:.3s; z-index:99; font-weight:bold; white-space:nowrap; }
         
@@ -79,7 +83,10 @@
             <button id="b-fil" onclick="app.filt()">📋 未領</button>
         </div>
 
-        <button class="btn btn-copy-all" onclick="app.copyAll()">📋 一鍵複製所有序號清單</button>
+        <div class="copy-btns">
+            <button class="btn btn-new" onclick="app.copyNew()">🆕 一鍵複製新群</button>
+            <button class="btn btn-old" onclick="app.copyOld()">🗄️ 一鍵複製舊群</button>
+        </div>
 
         <div id="loading" style="text-align:center;color:#e67e22;font-weight:bold;padding:20px;">🔄 連線讀取中...</div>
         
@@ -116,7 +123,7 @@
     <script>
     // === 設定區 ===
     const SHEET = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSkENoeJW2fV8JucN514cMysAStsgNLzjbYKrE04bDSAJOKTayexd-Ve3Fce4KB6FQsXvtMTgPZ7Mnw/pub?output=csv";
-    const CUT = 213; // 新舊禮包分界線
+    const CUT = 213; // 新舊禮包分界線，大於等於這天的算「新群」，小於的算「舊群」
 
     // === 動態寫入 PWA 條件 ===
     const icon = "https://raw.githubusercontent.com/ox0114xo/Gift-code/b9cefb2c764b9b84b111abfddf9df6ec9327a6f5/1771553807683.png";
@@ -202,22 +209,33 @@
             let e=document.createElement('textarea'); e.value=c; document.body.appendChild(e); e.select(); document.execCommand('copy'); e.remove();
             this.msg('✅ 已複製並標記領取'); this.tr(c,true); 
         },
-        // === 一鍵複製所有序號 ===
-        copyAll() {
+        // === 複製新群序號 ===
+        copyNew() {
             if(this.d.length === 0) return this.msg('⚠️ 尚未載入資料');
+            let arr = this.d.filter(x => this.pd(x.d) >= CUT).sort((x,y) => this.pd(y.d) - this.pd(x.d));
+            if(arr.length === 0) return this.msg('⚠️ 沒有新群序號');
             let txt = '';
-            // 複製時依照日期由新到舊排序
-            let arr = [...this.d].sort((x,y) => this.pd(y.d) - this.pd(x.d));
-            arr.forEach(x => {
-                txt += `${x.d} ${x.n} ${x.p}點\n${x.c}\n\n`;
-            });
+            arr.forEach(x => { txt += `${x.d} ${x.n} ${x.p}點\n${x.c}\n\n`; });
+            this.execCopy(txt.trim(), '🆕 已成功複製新群序號！');
+        },
+        // === 複製舊群序號 ===
+        copyOld() {
+            if(this.d.length === 0) return this.msg('⚠️ 尚未載入資料');
+            let arr = this.d.filter(x => this.pd(x.d) < CUT).sort((x,y) => this.pd(y.d) - this.pd(x.d));
+            if(arr.length === 0) return this.msg('⚠️ 沒有舊群序號');
+            let txt = '';
+            arr.forEach(x => { txt += `${x.d} ${x.n} ${x.p}點\n${x.c}\n\n`; });
+            this.execCopy(txt.trim(), '🗄️ 已成功複製舊群序號！');
+        },
+        // 共用執行複製功能
+        execCopy(txt, succMsg) {
             let e = document.createElement('textarea'); 
-            e.value = txt.trim(); 
+            e.value = txt; 
             document.body.appendChild(e); 
             e.select(); 
             document.execCommand('copy'); 
             e.remove();
-            this.msg('📋 已成功複製所有序號！');
+            this.msg(succMsg);
         },
         msg(m) { let t=document.getElementById('toast'); t.innerText=m; t.classList.add('show'); t.style.bottom='40px'; setTimeout(()=>{t.style.bottom='-50px'; t.classList.remove('show');},2000); },
         op(c) { this.tId=c; document.getElementById('mod').style.display='flex'; },
@@ -228,3 +246,4 @@
     </script>
 </body>
 </html>
+
