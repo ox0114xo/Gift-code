@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>贏麻小助手</title>
     
-    <link rel="icon" href="https://raw.githubusercontent.com/ox0114xo/Gift-code/b9cefb2c764b9b84b111abfddf9df6ec9327a6f5/1771553807683.png">
-    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/ox0114xo/Gift-code/b9cefb2c764b9b84b111abfddf9df6ec9327a6f5/1771553807683.png">
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/ox0114xo/Gift-code/refs/heads/main/IMG_20260220_102243.png">
+    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/ox0114xo/Gift-code/refs/heads/main/IMG_20260220_102243.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="贏麻小助手">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#f2f4f7">
     <link rel="manifest" id="pwa-manifest">
 
@@ -28,6 +30,11 @@
         .ctrl button { flex:1; padding:12px 0; border:none; border-radius:50px; background:#fff; font-weight:bold; color:#555; box-shadow:0 2px 8px rgba(0,0,0,.08); cursor:pointer; }
         .ctrl button.on { background:#2c3e50; color:#fff; }
         
+        .copy-btns { display:flex; gap:10px; margin-bottom:20px; }
+        .copy-btns .btn { margin-bottom:0; flex:1; font-size:0.95rem; padding:12px 0; }
+        .btn-new { background:linear-gradient(135deg, #e74c3c, #c0392b); color:#fff; box-shadow:0 4px 15px rgba(231,76,60,.3); }
+        .btn-old { background:linear-gradient(135deg, #7f8c8d, #95a5a6); color:#fff; box-shadow:0 4px 15px rgba(127,140,141,.3); }
+
         .card { background:#fff; padding:18px; border-radius:16px; margin-bottom:12px; position:relative; border:1px solid #f0f0f0; }
         .card.r { opacity:.6; background:#f8f9fa; }
         .card.p { background:#fffcf2; }
@@ -36,36 +43,24 @@
         .c-top strong { color:#e74c3c; font-size:1.3rem; font-weight:800; }
         .c-top span { background:#eee; padding:3px 8px; border-radius:6px; font-size:.8rem; margin-left:8px; font-weight:bold; color:#555; }
         .note { color:#888; font-size:.9rem; max-width:60%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; text-align:right;}
-        .code { background:#ebf5ff; color:#007bff; border:2px dashed #a6cfff; padding:14px; text-align:center; border-radius:10px; font-family:monospace; font-size:1.4rem; font-weight:bold; margin-bottom:12px; cursor:pointer; user-select:all; }
+        .code { background:#ebf5ff; color:#007bff; border:2px dashed #a6cfff; padding:14px; text-align:center; border-radius:10px; font-family:monospace; font-size:1.4rem; font-weight:bold; margin-bottom:12px; cursor:pointer; }
+        
         .acts { display:flex; justify-content:space-between; border-top:1px solid #eee; padding-top:12px; align-items:center; }
         .acts a { color:#999; font-size:.85rem; padding:6px 10px; background:#f9f9f9; border-radius:8px; cursor:pointer; }
         label { display:flex; align-items:center; gap:8px; font-weight:bold; color:#555; cursor:pointer; }
-        input[type="checkbox"] { width:22px; height:22px; accent-color:#27ae60; cursor:pointer; }
+        input[type="checkbox"] { width:22px; height:22px; accent-color:#27ae60; }
         
-        .btn { width:100%; padding:14px; border:none; border-radius:12px; font-weight:bold; font-size:1.05rem; cursor:pointer; margin-bottom:15px; }
-        
-        /* 雙按鈕排版與樣式 */
-        .copy-btns { display:flex; gap:10px; margin-bottom:20px; }
-        .copy-btns .btn { margin-bottom:0; flex:1; font-size:0.95rem; padding:12px 0; }
-        .btn-new { background:linear-gradient(135deg, #e74c3c, #c0392b); color:#fff; box-shadow:0 4px 15px rgba(231,76,60,.3); }
-        .btn-old { background:linear-gradient(135deg, #7f8c8d, #95a5a6); color:#fff; box-shadow:0 4px 15px rgba(127,140,141,.3); }
-        .btn-new:active, .btn-old:active { transform:scale(0.96); }
-
-        #toast { position:fixed; bottom:-50px; left:50%; transform:translateX(-50%); background:rgba(30,30,30,.9); color:#fff; padding:12px 24px; border-radius:50px; transition:.3s; z-index:99; font-weight:bold; white-space:nowrap; }
+        .btn { width:100%; padding:14px; border:none; border-radius:12px; font-weight:bold; font-size:1.05rem; cursor:pointer; }
+        #toast { position:fixed; bottom:-50px; left:50%; transform:translateX(-50%); background:rgba(30,30,30,.9); color:#fff; padding:12px 24px; border-radius:50px; transition:.3s; z-index:99; font-weight:bold; }
         
         .modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); align-items:center; justify-content:center; z-index:100; backdrop-filter:blur(2px); }
-        .m-box { background:#fff; padding:25px; border-radius:20px; width:85%; max-width:320px; text-align:center; box-shadow:0 10px 30px rgba(0,0,0,.25); }
+        .m-box { background:#fff; padding:25px; border-radius:20px; width:85%; max-width:320px; text-align:center; }
 
-        /* === 漂浮安裝通知條 === */
-        .install-bar { display:none; position:fixed; bottom:20px; left:50%; transform:translateX(-50%); width:92%; max-width:450px; background:#2c3e50; color:#fff; padding:14px 18px; border-radius:16px; box-shadow:0 10px 25px rgba(0,0,0,0.3); z-index:9999; align-items:center; gap:12px; animation: slideUp 0.5s ease; }
-        .i-logo { width:45px; height:45px; border-radius:10px; object-fit:cover; }
-        .i-text { flex:1; display:flex; flex-direction:column; }
-        .i-text strong { font-size:1.05rem; }
-        .i-text span { font-size:0.8rem; color:#bdc3c7; margin-top:2px; }
-        .i-btn { background:#27ae60; color:#fff; border:none; padding:8px 16px; border-radius:50px; font-weight:bold; cursor:pointer; font-size:0.95rem; }
-        .i-btn:active { transform:scale(0.95); }
-        .i-close { padding:5px; color:#7f8c8d; cursor:pointer; font-size:1.2rem; margin-left:5px; font-weight:bold; }
-        @keyframes slideUp { from { bottom:-100px; opacity:0; } to { bottom:20px; opacity:1; } }
+        .install-bar { display:none; position:fixed; bottom:20px; left:50%; transform:translateX(-50%); width:92%; max-width:450px; background:#2c3e50; color:#fff; padding:14px; border-radius:16px; box-shadow:0 10px 25px rgba(0,0,0,0.3); z-index:999; align-items:center; gap:12px; animation:slideUp 0.5s; }
+        .i-logo { width:45px; height:45px; border-radius:10px; }
+        .i-text { flex:1; font-size:0.9rem; }
+        .i-btn { background:#27ae60; color:#fff; border:none; padding:8px 15px; border-radius:50px; font-weight:bold; }
+        @keyframes slideUp { from { bottom:-100px; } to { bottom:20px; } }
     </style>
 </head>
 <body>
@@ -84,84 +79,54 @@
         </div>
 
         <div class="copy-btns">
-            <button class="btn btn-new" onclick="app.copyNew()">🆕 一鍵複製新群</button>
-            <button class="btn btn-old" onclick="app.copyOld()">🗄️ 一鍵複製舊群</button>
+            <button class="btn btn-new" onclick="app.copyGroup('new')">🆕 一鍵複製新群</button>
+            <button class="btn btn-old" onclick="app.copyGroup('old')">🗄️ 一鍵複製舊群</button>
         </div>
 
-        <div id="loading" style="text-align:center;color:#e67e22;font-weight:bold;padding:20px;">🔄 連線讀取中...</div>
-        
-        <div style="font-weight:bold;color:#555;margin:15px 0 10px;padding-left:10px;border-left:4px solid #e74c3c;">🔥 最新禮包區</div>
+        <div id="loading" style="text-align:center;color:#e67e22;font-weight:bold;padding:20px;">🔄 連線中...</div>
+        <div style="font-weight:bold;color:#555;margin-bottom:10px;padding-left:10px;border-left:4px solid #e74c3c;">🔥 最新禮包區</div>
         <div id="list"></div>
-
-        <button class="btn" style="background:#e0e0e0;color:#555;box-shadow:none;margin-top:15px;" onclick="document.getElementById('old').style.display='block';this.style.display='none';">📂 顯示歷史庫存 ▼</button>
+        <button class="btn" style="background:#e0e0e0;color:#555;margin-top:15px;" onclick="document.getElementById('old').style.display='block';this.style.display='none';">📂 顯示歷史庫存 ▼</button>
         <div id="old" style="display:none"></div>
-
-        <div style="text-align:center; margin-top:40px;"><span style="font-size:0.9rem; color:#ccc; cursor:pointer; text-decoration:underline;" onclick="app.reset()">重置紀錄</span></div>
+        <div style="text-align:center; margin:40px 0;"><span style="font-size:0.9rem; color:#ccc; cursor:pointer;" onclick="app.reset()">重置紀錄</span></div>
     </div>
 
     <div id="toast"></div>
 
     <div id="mod" class="modal">
         <div class="m-box">
-            <h3 style="margin-top:0;margin-bottom:20px;color:#333;">回報失效</h3>
-            <button class="btn" style="background:#fff5f5;color:#e74c3c;border:1px solid #ffcccc;box-shadow:none;" onclick="app.rep('過期')">📅 已過期</button>
-            <button class="btn" style="background:#fff5f5;color:#e74c3c;border:1px solid #ffcccc;box-shadow:none;" onclick="app.rep('領完')">😫 已領完</button>
-            <button class="btn" style="background:#fff;color:#555;border:1px solid #eee;box-shadow:none;margin-bottom:0;" onclick="document.getElementById('mod').style.display='none'">取消</button>
+            <h3 style="margin-top:0">回報失效</h3>
+            <button class="btn" style="background:#fff5f5;color:#e74c3c;border:1px solid #ffcccc;margin-bottom:10px" onclick="app.rep('過期')">📅 已過期</button>
+            <button class="btn" style="background:#fff5f5;color:#e74c3c;border:1px solid #ffcccc;margin-bottom:10px" onclick="app.rep('領完')">😫 已領完</button>
+            <button class="btn" style="background:#fff;border:1px solid #eee;" onclick="document.getElementById('mod').style.display='none'">取消</button>
         </div>
     </div>
 
     <div id="install-bar" class="install-bar">
-        <img src="https://raw.githubusercontent.com/ox0114xo/Gift-code/b9cefb2c764b9b84b111abfddf9df6ec9327a6f5/1771553807683.png" class="i-logo">
-        <div class="i-text">
-            <strong>加到手機桌面</strong>
-            <span id="i-desc">一鍵開啟，免找網址！</span>
-        </div>
+        <img src="https://raw.githubusercontent.com/ox0114xo/Gift-code/refs/heads/main/IMG_20260220_102243.png" class="i-logo">
+        <div class="i-text" id="i-desc"><strong>加到手機桌面</strong><br>一鍵開啟免找網址</div>
         <button id="i-btn" class="i-btn">安裝</button>
-        <span class="i-close" onclick="document.getElementById('install-bar').style.display='none'">✕</span>
+        <span style="padding:5px;cursor:pointer" onclick="document.getElementById('install-bar').style.display='none'">✕</span>
     </div>
 
     <script>
-    // === 設定區 ===
     const SHEET = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSkENoeJW2fV8JucN514cMysAStsgNLzjbYKrE04bDSAJOKTayexd-Ve3Fce4KB6FQsXvtMTgPZ7Mnw/pub?output=csv";
-    const CUT = 213; // 新舊禮包分界線，大於等於這天的算「新群」，小於的算「舊群」
+    const CUT = 213; // 2/13 為界
+    const icon = "https://raw.githubusercontent.com/ox0114xo/Gift-code/refs/heads/main/IMG_20260220_102243.png";
 
-    // === 動態寫入 PWA 條件 ===
-    const icon = "https://raw.githubusercontent.com/ox0114xo/Gift-code/b9cefb2c764b9b84b111abfddf9df6ec9327a6f5/1771553807683.png";
-    document.getElementById('pwa-manifest').href = 'data:application/manifest+json;utf-8,'+encodeURIComponent(JSON.stringify({name:"贏麻小助手",short_name:"贏麻小助手",start_url:".",display:"standalone",background_color:"#f2f4f7",icons:[{src:icon,sizes:"192x192",type:"image/png"}]}));
+    // PWA Manifest
+    document.getElementById('pwa-manifest').href = 'data:application/manifest+json;utf-8,'+encodeURIComponent(JSON.stringify({name:"贏麻小助手",short_name:"贏麻小助手",start_url:".",display:"standalone",background_color:"#f2f4f7",icons:[{src:icon,sizes:"192x192",type:"image/png"},{src:icon,sizes:"512x512",type:"image/png"}]}));
     if('serviceWorker' in navigator) navigator.serviceWorker.register(URL.createObjectURL(new Blob(["self.addEventListener('fetch',e=>{});"], {type:'text/javascript'})));
 
-    // === 安裝通知邏輯 ===
     let defPrompt;
     const isApp = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-    const iBar = document.getElementById('install-bar');
-    const iBtn = document.getElementById('i-btn');
-    const iDesc = document.getElementById('i-desc');
-
     if (!isApp) {
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            defPrompt = e;
-            iBar.style.display = 'flex'; 
-            iBtn.onclick = () => {
-                defPrompt.prompt();
-                defPrompt.userChoice.then((choice) => {
-                    if (choice.outcome === 'accepted') iBar.style.display = 'none';
-                    defPrompt = null;
-                });
-            };
-        });
-
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        if (isIOS) {
-            setTimeout(() => {
-                iBar.style.display = 'flex';
-                iDesc.innerHTML = "點擊底部的 <b>分享⍗</b> 加到主畫面";
-                iBtn.style.display = 'none';
-            }, 800);
-        }
+        window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); defPrompt = e; document.getElementById('install-bar').style.display = 'flex'; });
+        const iBtn = document.getElementById('i-btn');
+        if (iBtn) iBtn.onclick = () => { if(defPrompt){ defPrompt.prompt(); defPrompt.userChoice.then(c => { if(c.outcome==='accepted') document.getElementById('install-bar').style.display='none'; }); } };
+        if (/iPad|iPhone|iPod/.test(navigator.userAgent)) { setTimeout(() => { document.getElementById('install-bar').style.display='flex'; document.getElementById('i-desc').innerHTML="點擊 <b>分享⍗</b><br>選擇 <b>加到主畫面⊞</b>"; document.getElementById('i-btn').style.display='none'; }, 1000); }
     }
 
-    // === 核心程式 ===
     const app = {
         d: [], st: JSON.parse(localStorage.getItem('gData')) || { r:[], p:[], b:{}, s:'d', asc:false, f:false }, tId: null,
         init() {
@@ -169,33 +134,27 @@
                 document.getElementById('loading').style.display='none';
                 let l = c.split(/\r?\n/);
                 for(let i=1; i<l.length; i++){
-                    let row = l[i].split(',');
-                    if(row[2]) this.d.push({ d:row[0].trim(), p:+row[1], c:row[2].trim(), n:row[3]||"" });
+                    let r = l[i].split(',');
+                    if(r[2]) this.d.push({ d:r[0].trim(), p:+r[1], c:r[2].trim(), n:r[3]||"" });
                 }
                 this.rnd();
-            }).catch(()=>document.getElementById('loading').innerText='⚠️ 資料讀取失敗');
+            }).catch(()=>document.getElementById('loading').innerText='⚠️ 讀取失敗');
         },
         sv() { localStorage.setItem('gData', JSON.stringify(this.st)); this.rnd(); },
         pd(d) { let a=d.split('/'); return a[0]*100 + +a[1]; },
         rnd() {
             let pts=0, a=this.d.filter(x=>{ pts+=x.p; return !this.st.f || (!this.st.r.includes(x.c) && !this.st.b[x.c]); });
             document.getElementById('v-cnt').innerText = this.d.length;
-            document.getElementById('v-pts').innerText = pts;
+            document.getElementById('v-pts').innerText = pts.toLocaleString();
             a.sort((x,y) => this.st.s==='d' ? (this.st.asc ? this.pd(x.d)-this.pd(y.d) : this.pd(y.d)-this.pd(x.d)) : (this.st.asc ? x.p-y.p : y.p-x.p));
-            
             let hN='', hO='';
             a.forEach(x => {
                 let isR=this.st.r.includes(x.c), isP=this.st.p.includes(x.c), isB=!!this.st.b[x.c];
-                let cls = isB?'b':isR?'r':isP?'p':'';
-                let tag = isB?'<div class="tag b" style="position:absolute;top:0;right:0;padding:4px 10px;font-size:0.75rem;border-radius:0 16px 0 12px;background:#ffcccc;color:#c0392b;font-weight:bold;">⚠️ 失效</div>' : 
-                          isP?'<div class="tag p" style="position:absolute;top:0;right:0;padding:4px 10px;font-size:0.75rem;border-radius:0 16px 0 12px;background:#ffeeba;color:#b7791f;font-weight:bold;">⏳ 暫存</div>' : '';
-                
-                let h = `<div class="card ${cls}">${tag}<div class="c-top"><div><strong>💰${x.p}</strong><span>${x.d}</span></div><div class="note">${x.n}</div></div><div class="code" onclick="app.cp('${x.c}')">${x.c}</div><div class="acts"><div style="display:flex;gap:8px"><a onclick="app.op('${x.c}')">⚠️回報</a><a onclick="app.tp('${x.c}')" style="color:${isP?'#d35400':'#999'}">⏳資格未符</a></div><label><input type="checkbox" onchange="app.tr('${x.c}',this.checked)" ${isR?'checked':''}>已領</label></div></div>`;
+                let h = `<div class="card ${isB?'b':isR?'r':isP?'p':''}">${isB?'<div style="position:absolute;top:0;right:0;padding:4px 10px;font-size:0.7rem;background:#ffcccc;color:#c0392b;font-weight:bold;border-radius:0 16px 0 12px">⚠️失效</div>':isP?'<div style="position:absolute;top:0;right:0;padding:4px 10px;font-size:0.7rem;background:#ffeeba;color:#b7791f;font-weight:bold;border-radius:0 16px 0 12px">⏳暫存</div>':''}<div class="c-top"><div><strong>💰${x.p}</strong><span>${x.d}</span></div><div class="note">${x.n}</div></div><div class="code" onclick="app.cp('${x.c}')">${x.c}</div><div class="acts"><div style="display:flex;gap:8px"><a onclick="app.op('${x.c}')">⚠️回報</a><a onclick="app.tp('${x.c}')" style="color:${isP?'#d35400':'#999'}">⏳資格未符</a></div><label><input type="checkbox" onchange="app.tr('${x.c}',this.checked)" ${isR?'checked':''}>已領</label></div></div>`;
                 this.pd(x.d)>=CUT ? hN+=h : hO+=h;
             });
-            document.getElementById('list').innerHTML = hN||'<div style="text-align:center;padding:20px;color:#999">無資料</div>';
-            document.getElementById('old').innerHTML = hO||'<div style="text-align:center;padding:20px;color:#999">無資料</div>';
-            
+            document.getElementById('list').innerHTML = hN || '<div style="text-align:center;color:#999">暫無新禮包</div>';
+            document.getElementById('old').innerHTML = hO || '<div style="text-align:center;color:#999">暫無歷史禮包</div>';
             document.getElementById('b-date').className=this.st.s==='d'?'on':'';
             document.getElementById('b-pts').className=this.st.s==='p'?'on':'';
             document.getElementById('b-fil').className=this.st.f?'on':'';
@@ -205,45 +164,23 @@
         tr(c, v) { v ? (this.st.r.push(c), this.st.p=this.st.p.filter(x=>x!==c)) : this.st.r=this.st.r.filter(x=>x!==c); this.sv(); },
         tp(c) { this.st.p.includes(c) ? this.st.p=this.st.p.filter(x=>x!==c) : this.st.p.push(c); this.sv(); },
         cp(c) { 
-            if(this.st.b[c]) return this.msg('⚠️ 該序號已回報失效'); 
+            if(this.st.b[c]) return this.msg('⚠️ 該序號已回報失效');
             let e=document.createElement('textarea'); e.value=c; document.body.appendChild(e); e.select(); document.execCommand('copy'); e.remove();
             this.msg('✅ 已複製並標記領取'); this.tr(c,true); 
         },
-        // === 複製新群序號 ===
-        copyNew() {
-            if(this.d.length === 0) return this.msg('⚠️ 尚未載入資料');
-            let arr = this.d.filter(x => this.pd(x.d) >= CUT).sort((x,y) => this.pd(y.d) - this.pd(x.d));
-            if(arr.length === 0) return this.msg('⚠️ 沒有新群序號');
-            let txt = '';
-            arr.forEach(x => { txt += `${x.d} ${x.n} ${x.p}點\n${x.c}\n\n`; });
-            this.execCopy(txt.trim(), '🆕 已成功複製新群序號！');
+        copyGroup(t) {
+            let res = this.d.filter(x => t==='new' ? this.pd(x.d)>=CUT : this.pd(x.d)<CUT).sort((a,b)=>this.pd(b.d)-this.pd(a.d));
+            if(!res.length) return this.msg('⚠️ 尚無資料');
+            let txt = ''; res.forEach(x => txt += `${x.d} ${x.n} ${x.p}點\n${x.c}\n\n`);
+            let e=document.createElement('textarea'); e.value=txt.trim(); document.body.appendChild(e); e.select(); document.execCommand('copy'); e.remove();
+            this.msg(`📋 已複製${t==='new'?'新群':'舊群'}清單`);
         },
-        // === 複製舊群序號 ===
-        copyOld() {
-            if(this.d.length === 0) return this.msg('⚠️ 尚未載入資料');
-            let arr = this.d.filter(x => this.pd(x.d) < CUT).sort((x,y) => this.pd(y.d) - this.pd(x.d));
-            if(arr.length === 0) return this.msg('⚠️ 沒有舊群序號');
-            let txt = '';
-            arr.forEach(x => { txt += `${x.d} ${x.n} ${x.p}點\n${x.c}\n\n`; });
-            this.execCopy(txt.trim(), '🗄️ 已成功複製舊群序號！');
-        },
-        // 共用執行複製功能
-        execCopy(txt, succMsg) {
-            let e = document.createElement('textarea'); 
-            e.value = txt; 
-            document.body.appendChild(e); 
-            e.select(); 
-            document.execCommand('copy'); 
-            e.remove();
-            this.msg(succMsg);
-        },
-        msg(m) { let t=document.getElementById('toast'); t.innerText=m; t.classList.add('show'); t.style.bottom='40px'; setTimeout(()=>{t.style.bottom='-50px'; t.classList.remove('show');},2000); },
+        msg(m) { let t=document.getElementById('toast'); t.innerText=m; t.style.bottom='40px'; setTimeout(()=>t.style.bottom='-50px',2000); },
         op(c) { this.tId=c; document.getElementById('mod').style.display='flex'; },
-        rep(t) { this.st.b[this.tId]=t; this.sv(); document.getElementById('mod').style.display='none'; this.cp('回報：序號 '+this.tId+' 已'+t); },
-        reset() { if(confirm('確定清空所有紀錄？')){ localStorage.removeItem('gData'); location.reload(); } }
+        rep(t) { this.st.b[this.tId]=t; this.sv(); document.getElementById('mod').style.display='none'; this.msg('✅ 已標記失效'); },
+        reset() { if(confirm('確定清空紀錄？')){ localStorage.removeItem('gData'); location.reload(); } }
     };
     app.init();
     </script>
 </body>
 </html>
-
