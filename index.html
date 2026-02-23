@@ -11,71 +11,135 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="贏麻小助手">
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#f2f4f7">
+    <meta name="theme-color" content="#fdfbfb">
     <link rel="manifest" id="pwa-manifest">
 
     <style>
-        /* 極簡化 CSS */
-        body,html { margin:0; padding:0; font-family:-apple-system,BlinkMacSystemFont,sans-serif; background:#f2f4f7; color:#333; user-select:none; }
-        * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-        .wrap { max-width:600px; margin:0 auto; padding:15px; min-height:100vh; }
-        h2 { text-align:center; color:#2c3e50; margin:5px 0 20px; font-size:1.8rem; font-weight:900; }
+        /* === 全局精美升級 CSS === */
+        :root {
+            --primary: #d35400;
+            --primary-light: #fef5e7;
+            --text-main: #2c3e50;
+            --text-sub: #7f8c8d;
+            --bg-color: #f4f7f6;
+            --card-shadow: 0 8px 20px rgba(0,0,0,0.06);
+        }
         
-        .dash { display:flex; background:#fff; padding:15px; border-radius:16px; margin-bottom:15px; text-align:center; box-shadow:0 4px 10px rgba(0,0,0,.05); }
-        .dash div { flex:1; }
-        .dash span { font-size:.85rem; color:#95a5a6; font-weight:700; }
-        .dash strong { display:block; font-size:1.5rem; color:#2c3e50; font-weight:900; }
+        body, html { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg-color); color: var(--text-main); user-select: none; -webkit-font-smoothing: antialiased; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
-        .ctrl { display:flex; gap:8px; margin-bottom:15px; position:sticky; top:10px; z-index:10; background:rgba(242,244,247,.95); padding:5px 0; backdrop-filter:blur(5px); }
-        .ctrl button { flex:1; padding:12px 0; border:none; border-radius:50px; background:#fff; font-weight:bold; color:#555; box-shadow:0 2px 8px rgba(0,0,0,.08); cursor:pointer; }
-        .ctrl button.on { background:#2c3e50; color:#fff; }
+        /* 頂部背景漸層與主容器 */
+        body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 250px; background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); z-index: -1; border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+        .wrap { max-width: 600px; margin: 0 auto; padding: 20px 15px; min-height: 100vh; }
         
-        .copy-btns { display:flex; gap:10px; margin-bottom:20px; }
-        .copy-btns .btn { margin-bottom:0; flex:1; font-size:0.95rem; padding:12px 0; }
-        .btn-new { background:linear-gradient(135deg, #e74c3c, #c0392b); color:#fff; box-shadow:0 4px 15px rgba(231,76,60,.3); }
-        .btn-old { background:linear-gradient(135deg, #7f8c8d, #95a5a6); color:#fff; box-shadow:0 4px 15px rgba(127,140,141,.3); }
+        /* 標題區 */
+        .header { text-align: center; margin-bottom: 25px; animation: fadeInDown 0.6s ease; }
+        .logo-img { width: 75px; height: 75px; border-radius: 20px; box-shadow: 0 6px 15px rgba(0,0,0,0.15); margin-bottom: 10px; border: 2px solid #fff; }
+        h2 { margin: 0; font-size: 1.9rem; font-weight: 900; background: linear-gradient(135deg, #c0392b, #e74c3c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 1px; }
+        .subtitle { font-size: 0.85rem; color: var(--text-sub); font-weight: bold; margin-top: 4px; display: block; letter-spacing: 0.5px; }
+        
+        /* 數據看板 (尊榮漸層卡片) */
+        .dash { display: flex; gap: 12px; margin-bottom: 20px; animation: fadeInUp 0.5s ease; }
+        .dash-card { flex: 1; padding: 18px 10px; border-radius: 20px; text-align: center; box-shadow: var(--card-shadow); position: relative; overflow: hidden; }
+        .dash-card::after { content:""; position:absolute; top:0; right:0; width:60px; height:60px; background:rgba(255,255,255,0.2); border-radius:50%; transform: translate(20px, -20px); }
+        .c-blue { background: linear-gradient(135deg, #3498db, #2980b9); color: #fff; }
+        .c-gold { background: linear-gradient(135deg, #f1c40f, #e67e22); color: #fff; }
+        .dash span { font-size: 0.85rem; font-weight: 700; opacity: 0.9; }
+        .dash strong { display: block; font-size: 1.8rem; font-weight: 900; margin-top: 5px; line-height: 1; }
+        
+        /* 篩選控制器 (膠囊樣式) */
+        .ctrl { display: flex; background: #fff; padding: 6px; border-radius: 50px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 20px; position: sticky; top: 10px; z-index: 10; border: 1px solid #f0f0f0; }
+        .ctrl button { flex: 1; padding: 10px 0; border: none; border-radius: 40px; background: transparent; font-weight: 800; color: var(--text-sub); font-size: 0.95rem; cursor: pointer; transition: all 0.3s; }
+        .ctrl button.on { background: var(--text-main); color: #fff; box-shadow: 0 4px 10px rgba(44,62,80,0.3); }
+        
+        /* 雙複製按鈕 */
+        .copy-btns { display: flex; gap: 12px; margin-bottom: 25px; }
+        .copy-btns .btn { flex: 1; padding: 14px 0; font-size: 0.95rem; border-radius: 16px; margin-bottom: 0; }
+        .btn-new { background: linear-gradient(135deg, #e74c3c, #c0392b); color: #fff; box-shadow: 0 6px 15px rgba(231,76,60,0.3); }
+        .btn-old { background: linear-gradient(135deg, #95a5a6, #7f8c8d); color: #fff; box-shadow: 0 6px 15px rgba(127,140,141,0.3); }
+        .btn:active { transform: scale(0.95) translateY(2px); box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
 
-        .card { background:#fff; padding:18px; border-radius:16px; margin-bottom:12px; position:relative; border:1px solid #f0f0f0; }
-        .card.r { opacity:.6; background:#f8f9fa; }
-        .card.p { background:#fffcf2; }
-        .card.b { opacity:.7; background:#fff5f5; }
-        .c-top { display:flex; justify-content:space-between; margin-bottom:12px; align-items:center; }
-        .c-top strong { color:#e74c3c; font-size:1.3rem; font-weight:800; }
-        .c-top span { background:#eee; padding:3px 8px; border-radius:6px; font-size:.8rem; margin-left:8px; font-weight:bold; color:#555; }
-        .note { color:#888; font-size:.9rem; max-width:60%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; text-align:right;}
-        .code { background:#ebf5ff; color:#007bff; border:2px dashed #a6cfff; padding:14px; text-align:center; border-radius:10px; font-family:monospace; font-size:1.4rem; font-weight:bold; margin-bottom:12px; cursor:pointer; }
+        /* 禮包卡片設計 */
+        .card { background: #fff; padding: 20px; border-radius: 24px; margin-bottom: 16px; position: relative; box-shadow: var(--card-shadow); border: 1px solid rgba(0,0,0,0.02); transition: transform 0.2s, box-shadow 0.2s; animation: fadeInUp 0.5s ease backwards; }
+        .card:hover { transform: translateY(-3px); box-shadow: 0 12px 25px rgba(0,0,0,0.08); }
+        .card.r { opacity: 0.65; background: #fdfdfd; border: 1px dashed #ddd; box-shadow: none; }
+        .card.p { background: #fffdf5; border: 1px solid #ffecb3; }
+        .card.b { opacity: 0.7; background: #fff5f5; border: 1px dashed #ffcccc; }
         
-        .acts { display:flex; justify-content:space-between; border-top:1px solid #eee; padding-top:12px; align-items:center; }
-        .acts a { color:#999; font-size:.85rem; padding:6px 10px; background:#f9f9f9; border-radius:8px; cursor:pointer; }
-        label { display:flex; align-items:center; gap:8px; font-weight:bold; color:#555; cursor:pointer; }
-        input[type="checkbox"] { width:22px; height:22px; accent-color:#27ae60; }
+        /* 卡片頭部 */
+        .c-top { display: flex; justify-content: space-between; margin-bottom: 16px; align-items: center; }
+        .c-top-left { display: flex; align-items: center; gap: 8px; }
+        .c-points { color: #e74c3c; font-size: 1.4rem; font-weight: 900; background: var(--primary-light); padding: 4px 10px; border-radius: 12px; color: var(--primary); }
+        .c-date { background: #f0f2f5; padding: 4px 10px; border-radius: 8px; font-size: 0.8rem; font-weight: 800; color: #555; }
+        .note { color: var(--text-sub); font-size: 0.9rem; font-weight: bold; max-width: 50%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: right; }
         
-        .btn { width:100%; padding:14px; border:none; border-radius:12px; font-weight:bold; font-size:1.05rem; cursor:pointer; }
-        #toast { position:fixed; bottom:-50px; left:50%; transform:translateX(-50%); background:rgba(30,30,30,.9); color:#fff; padding:12px 24px; border-radius:50px; transition:.3s; z-index:99; font-weight:bold; }
+        /* 序號兌換券樣式 */
+        .code { background: repeating-linear-gradient(-45deg, #fafafa, #fafafa 10px, #f4f7f6 10px, #f4f7f6 20px); color: #2980b9; border: 2px dashed #bdc3c7; padding: 16px; text-align: center; border-radius: 16px; font-family: "Courier New", monospace; font-size: 1.5rem; font-weight: 900; margin-bottom: 16px; cursor: pointer; letter-spacing: 1px; transition: all 0.2s; position: relative; }
+        .code::before, .code::after { content: ""; position: absolute; top: 50%; width: 16px; height: 16px; background: #fff; border-radius: 50%; transform: translateY(-50%); }
+        .code::before { left: -9px; border-right: 2px dashed #bdc3c7; }
+        .code::after { right: -9px; border-left: 2px dashed #bdc3c7; }
+        .code:active { background: #e8f4fd; border-color: #3498db; transform: scale(0.98); color: #1565c0; }
         
-        .modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); align-items:center; justify-content:center; z-index:100; backdrop-filter:blur(2px); }
-        .m-box { background:#fff; padding:25px; border-radius:20px; width:85%; max-width:320px; text-align:center; }
+        /* 卡片底部操作區 */
+        .acts { display: flex; justify-content: space-between; border-top: 1px solid #f0f2f5; padding-top: 14px; align-items: center; }
+        .act-btns { display: flex; gap: 10px; }
+        .acts a { color: #95a5a6; font-size: 0.85rem; padding: 8px 14px; background: #f8f9fa; border-radius: 10px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .acts a:active { background: #eee; }
+        label { display: flex; align-items: center; gap: 8px; font-weight: 900; color: #555; cursor: pointer; font-size: 0.95rem; }
+        input[type="checkbox"] { width: 24px; height: 24px; accent-color: #27ae60; cursor: pointer; }
+        
+        /* 通用按鈕 */
+        .btn { width: 100%; padding: 16px; border: none; border-radius: 16px; font-weight: 900; font-size: 1.05rem; cursor: pointer; transition: all 0.2s; }
+        
+        /* 標籤 */
+        .tag { position: absolute; top: -1px; right: -1px; padding: 6px 14px; font-size: 0.75rem; font-weight: 900; border-radius: 0 24px 0 16px; z-index: 2; box-shadow: -2px 2px 10px rgba(0,0,0,0.05); }
+        .tag.b { background: #ffcccc; color: #c0392b; }
+        .tag.p { background: #ffeeba; color: #b7791f; }
 
-        .install-bar { display:none; position:fixed; bottom:20px; left:50%; transform:translateX(-50%); width:92%; max-width:450px; background:#2c3e50; color:#fff; padding:14px; border-radius:16px; box-shadow:0 10px 25px rgba(0,0,0,0.3); z-index:999; align-items:center; gap:12px; animation:slideUp 0.5s; }
-        .i-logo { width:45px; height:45px; border-radius:10px; }
-        .i-text { flex:1; font-size:0.9rem; }
-        .i-btn { background:#27ae60; color:#fff; border:none; padding:8px 15px; border-radius:50px; font-weight:bold; }
-        @keyframes slideUp { from { bottom:-100px; } to { bottom:20px; } }
+        /* 區塊標題 */
+        .sec-title { font-weight: 900; color: var(--text-main); margin: 25px 0 15px; padding-left: 12px; border-left: 5px solid var(--primary); font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
+
+        /* 動畫 */
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-15px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* 提示框與彈窗 */
+        #toast { position: fixed; bottom: -60px; left: 50%; transform: translateX(-50%); background: rgba(44,62,80,0.95); color: #fff; padding: 14px 28px; border-radius: 50px; transition: 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); z-index: 9999; font-weight: 900; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.65); align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(4px); }
+        .m-box { background: #fff; padding: 30px; border-radius: 24px; width: 85%; max-width: 340px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.2); animation: fadeInUp 0.3s ease; }
+
+        /* 底部安裝列 */
+        .install-bar { display: none; position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); width: 92%; max-width: 450px; background: rgba(44,62,80,0.95); backdrop-filter: blur(10px); color: #fff; padding: 16px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.3); z-index: 9999; align-items: center; gap: 14px; border: 1px solid rgba(255,255,255,0.1); }
+        .i-logo { width: 50px; height: 50px; border-radius: 12px; }
+        .i-text { flex: 1; display: flex; flex-direction: column; }
+        .i-text strong { font-size: 1.1rem; font-weight: 900; }
+        .i-text span { font-size: 0.8rem; color: #bdc3c7; margin-top: 4px; font-weight: bold; }
+        .i-btn { background: linear-gradient(135deg, #2ecc71, #27ae60); color: #fff; border: none; padding: 10px 18px; border-radius: 50px; font-weight: 900; cursor: pointer; box-shadow: 0 4px 10px rgba(46,204,113,0.3); }
     </style>
 </head>
 <body>
     <div class="wrap">
-        <h2>贏麻小助手</h2>
+        <div class="header">
+            <img src="https://raw.githubusercontent.com/ox0114xo/Gift-code/refs/heads/main/IMG_20260220_102243.png" class="logo-img" alt="Logo">
+            <h2>贏麻小助手</h2>
+            <span class="subtitle">一鍵複製 &bull; 自動同步雲端庫</span>
+        </div>
         
         <div class="dash">
-            <div><span>禮包總數</span><strong id="v-cnt">0</strong></div>
-            <div><span>總福利</span><strong id="v-pts" style="color:#e74c3c">0</strong></div>
+            <div class="dash-card c-blue">
+                <span>🎁 禮包總數</span>
+                <strong id="v-cnt">0</strong>
+            </div>
+            <div class="dash-card c-gold">
+                <span>💎 總福利點數</span>
+                <strong id="v-pts">0</strong>
+            </div>
         </div>
 
         <div class="ctrl">
-            <button id="b-date" class="on" onclick="app.sort('d')">📅 日期</button>
-            <button id="b-pts" onclick="app.sort('p')">💰 點數</button>
-            <button id="b-fil" onclick="app.filt()">📋 未領</button>
+            <button id="b-date" class="on" onclick="app.sort('d')">📅 日期排序</button>
+            <button id="b-pts" onclick="app.sort('p')">💰 點數排序</button>
+            <button id="b-fil" onclick="app.filt()">📋 隱藏已領</button>
         </div>
 
         <div class="copy-btns">
@@ -83,39 +147,41 @@
             <button class="btn btn-old" onclick="app.copyGroup('old')">🗄️ 一鍵複製舊群</button>
         </div>
 
-        <div id="loading" style="text-align:center;color:#e67e22;font-weight:bold;padding:20px;">🔄 連線中...</div>
-        <div style="font-weight:bold;color:#555;margin-bottom:10px;padding-left:10px;border-left:4px solid #e74c3c;">🔥 最新禮包區</div>
+        <div id="loading" style="text-align:center;color:#e67e22;font-weight:900;padding:30px;font-size:1.1rem;">🔄 連線讀取中...</div>
+        
+        <div class="sec-title">🔥 最新禮包區</div>
         <div id="list"></div>
-        <button class="btn" style="background:#e0e0e0;color:#555;margin-top:15px;" onclick="document.getElementById('old').style.display='block';this.style.display='none';">📂 顯示歷史庫存 ▼</button>
-        <div id="old" style="display:none"></div>
-        <div style="text-align:center; margin:40px 0;"><span style="font-size:0.9rem; color:#ccc; cursor:pointer;" onclick="app.reset()">重置紀錄</span></div>
+
+        <button class="btn" style="background:#e0e0e0;color:#555;margin-top:20px;box-shadow:none;" onclick="document.getElementById('old').style.display='block';this.style.display='none';">📂 顯示歷史庫存 ▼</button>
+        <div id="old" style="display:none; margin-top:15px;"></div>
+
+        <div style="text-align:center; margin:50px 0 20px;"><span style="font-size:0.9rem; color:#bdc3c7; cursor:pointer; font-weight:bold; letter-spacing:1px;" onclick="app.reset()">重置系統紀錄</span></div>
     </div>
 
     <div id="toast"></div>
 
     <div id="mod" class="modal">
         <div class="m-box">
-            <h3 style="margin-top:0">回報失效</h3>
-            <button class="btn" style="background:#fff5f5;color:#e74c3c;border:1px solid #ffcccc;margin-bottom:10px" onclick="app.rep('過期')">📅 已過期</button>
-            <button class="btn" style="background:#fff5f5;color:#e74c3c;border:1px solid #ffcccc;margin-bottom:10px" onclick="app.rep('領完')">😫 已領完</button>
-            <button class="btn" style="background:#fff;border:1px solid #eee;" onclick="document.getElementById('mod').style.display='none'">取消</button>
+            <h3 style="margin-top:0; color:#2c3e50; font-weight:900;">回報失效狀態</h3>
+            <button class="btn" style="background:#fff5f5;color:#e74c3c;border:2px solid #ffcccc;margin-bottom:12px;" onclick="app.rep('過期')">📅 該序號已過期</button>
+            <button class="btn" style="background:#fff5f5;color:#e74c3c;border:2px solid #ffcccc;margin-bottom:15px;" onclick="app.rep('領完')">😫 獎勵已經領完</button>
+            <button class="btn" style="background:#f4f7f6;color:#7f8c8d;border:none;" onclick="document.getElementById('mod').style.display='none'">取消返回</button>
         </div>
     </div>
 
     <div id="install-bar" class="install-bar">
         <img src="https://raw.githubusercontent.com/ox0114xo/Gift-code/refs/heads/main/IMG_20260220_102243.png" class="i-logo">
-        <div class="i-text" id="i-desc"><strong>加到手機桌面</strong><br>一鍵開啟免找網址</div>
-        <button id="i-btn" class="i-btn">安裝</button>
-        <span style="padding:5px;cursor:pointer" onclick="document.getElementById('install-bar').style.display='none'">✕</span>
+        <div class="i-text" id="i-desc"><strong>加到手機桌面</strong><span>一鍵開啟，免找網址！</span></div>
+        <button id="i-btn" class="i-btn">立即安裝</button>
+        <span style="padding:5px;cursor:pointer;font-size:1.2rem;font-weight:bold;color:#95a5a6;" onclick="document.getElementById('install-bar').style.display='none'">✕</span>
     </div>
 
     <script>
     const SHEET = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSkENoeJW2fV8JucN514cMysAStsgNLzjbYKrE04bDSAJOKTayexd-Ve3Fce4KB6FQsXvtMTgPZ7Mnw/pub?output=csv";
-    const CUT = 213; // 2/13 為界
+    const CUT = 213; 
     const icon = "https://raw.githubusercontent.com/ox0114xo/Gift-code/refs/heads/main/IMG_20260220_102243.png";
 
-    // PWA Manifest
-    document.getElementById('pwa-manifest').href = 'data:application/manifest+json;utf-8,'+encodeURIComponent(JSON.stringify({name:"贏麻小助手",short_name:"贏麻小助手",start_url:".",display:"standalone",background_color:"#f2f4f7",icons:[{src:icon,sizes:"192x192",type:"image/png"},{src:icon,sizes:"512x512",type:"image/png"}]}));
+    document.getElementById('pwa-manifest').href = 'data:application/manifest+json;utf-8,'+encodeURIComponent(JSON.stringify({name:"贏麻小助手",short_name:"贏麻小助手",start_url:".",display:"standalone",background_color:"#f4f7f6",icons:[{src:icon,sizes:"192x192",type:"image/png"},{src:icon,sizes:"512x512",type:"image/png"}]}));
     if('serviceWorker' in navigator) navigator.serviceWorker.register(URL.createObjectURL(new Blob(["self.addEventListener('fetch',e=>{});"], {type:'text/javascript'})));
 
     let defPrompt;
@@ -124,7 +190,7 @@
         window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); defPrompt = e; document.getElementById('install-bar').style.display = 'flex'; });
         const iBtn = document.getElementById('i-btn');
         if (iBtn) iBtn.onclick = () => { if(defPrompt){ defPrompt.prompt(); defPrompt.userChoice.then(c => { if(c.outcome==='accepted') document.getElementById('install-bar').style.display='none'; }); } };
-        if (/iPad|iPhone|iPod/.test(navigator.userAgent)) { setTimeout(() => { document.getElementById('install-bar').style.display='flex'; document.getElementById('i-desc').innerHTML="點擊 <b>分享⍗</b><br>選擇 <b>加到主畫面⊞</b>"; document.getElementById('i-btn').style.display='none'; }, 1000); }
+        if (/iPad|iPhone|iPod/.test(navigator.userAgent)) { setTimeout(() => { document.getElementById('install-bar').style.display='flex'; document.getElementById('i-desc').innerHTML="<strong>加到主畫面</strong><span>點擊底部 <b>分享⍗</b> 即可添加</span>"; document.getElementById('i-btn').style.display='none'; }, 1000); }
     }
 
     const app = {
@@ -138,7 +204,7 @@
                     if(r[2]) this.d.push({ d:r[0].trim(), p:+r[1], c:r[2].trim(), n:r[3]||"" });
                 }
                 this.rnd();
-            }).catch(()=>document.getElementById('loading').innerText='⚠️ 讀取失敗');
+            }).catch(()=>document.getElementById('loading').innerText='⚠️ 讀取失敗，請檢查網路');
         },
         sv() { localStorage.setItem('gData', JSON.stringify(this.st)); this.rnd(); },
         pd(d) { let a=d.split('/'); return a[0]*100 + +a[1]; },
@@ -148,13 +214,14 @@
             document.getElementById('v-pts').innerText = pts.toLocaleString();
             a.sort((x,y) => this.st.s==='d' ? (this.st.asc ? this.pd(x.d)-this.pd(y.d) : this.pd(y.d)-this.pd(x.d)) : (this.st.asc ? x.p-y.p : y.p-x.p));
             let hN='', hO='';
-            a.forEach(x => {
+            a.forEach((x, i) => {
                 let isR=this.st.r.includes(x.c), isP=this.st.p.includes(x.c), isB=!!this.st.b[x.c];
-                let h = `<div class="card ${isB?'b':isR?'r':isP?'p':''}">${isB?'<div style="position:absolute;top:0;right:0;padding:4px 10px;font-size:0.7rem;background:#ffcccc;color:#c0392b;font-weight:bold;border-radius:0 16px 0 12px">⚠️失效</div>':isP?'<div style="position:absolute;top:0;right:0;padding:4px 10px;font-size:0.7rem;background:#ffeeba;color:#b7791f;font-weight:bold;border-radius:0 16px 0 12px">⏳暫存</div>':''}<div class="c-top"><div><strong>💰${x.p}</strong><span>${x.d}</span></div><div class="note">${x.n}</div></div><div class="code" onclick="app.cp('${x.c}')">${x.c}</div><div class="acts"><div style="display:flex;gap:8px"><a onclick="app.op('${x.c}')">⚠️回報</a><a onclick="app.tp('${x.c}')" style="color:${isP?'#d35400':'#999'}">⏳資格未符</a></div><label><input type="checkbox" onchange="app.tr('${x.c}',this.checked)" ${isR?'checked':''}>已領</label></div></div>`;
+                let delay = i < 10 ? `style="animation-delay: ${i*0.05}s"` : ''; // 瀑布流載入動畫
+                let h = `<div class="card ${isB?'b':isR?'r':isP?'p':''}" ${delay}>${isB?'<div class="tag b">⚠️ 已失效</div>':isP?'<div class="tag p">⏳ 資格未符</div>':''}<div class="c-top"><div class="c-top-left"><span class="c-points">💰${x.p}</span><span class="c-date">${x.d}</span></div><div class="note">${x.n}</div></div><div class="code" onclick="app.cp('${x.c}')">${x.c}</div><div class="acts"><div class="act-btns"><a onclick="app.op('${x.c}')">⚠️回報</a><a onclick="app.tp('${x.c}')" style="color:${isP?'#e67e22':'#95a5a6'}">⏳暫存</a></div><label><input type="checkbox" onchange="app.tr('${x.c}',this.checked)" ${isR?'checked':''}>已領取</label></div></div>`;
                 this.pd(x.d)>=CUT ? hN+=h : hO+=h;
             });
-            document.getElementById('list').innerHTML = hN || '<div style="text-align:center;color:#999">暫無新禮包</div>';
-            document.getElementById('old').innerHTML = hO || '<div style="text-align:center;color:#999">暫無歷史禮包</div>';
+            document.getElementById('list').innerHTML = hN || '<div style="text-align:center;color:#95a5a6;padding:20px;font-weight:bold;">🎉 目前暫無新禮包</div>';
+            document.getElementById('old').innerHTML = hO || '<div style="text-align:center;color:#95a5a6;padding:20px;font-weight:bold;">📭 暫無歷史庫存</div>';
             document.getElementById('b-date').className=this.st.s==='d'?'on':'';
             document.getElementById('b-pts').className=this.st.s==='p'?'on':'';
             document.getElementById('b-fil').className=this.st.f?'on':'';
@@ -166,21 +233,22 @@
         cp(c) { 
             if(this.st.b[c]) return this.msg('⚠️ 該序號已回報失效');
             let e=document.createElement('textarea'); e.value=c; document.body.appendChild(e); e.select(); document.execCommand('copy'); e.remove();
-            this.msg('✅ 已複製並標記領取'); this.tr(c,true); 
+            this.msg('✅ 已複製並標記為已領取'); this.tr(c,true); 
         },
         copyGroup(t) {
             let res = this.d.filter(x => t==='new' ? this.pd(x.d)>=CUT : this.pd(x.d)<CUT).sort((a,b)=>this.pd(b.d)-this.pd(a.d));
-            if(!res.length) return this.msg('⚠️ 尚無資料');
+            if(!res.length) return this.msg('⚠️ 尚無符合資料');
             let txt = ''; res.forEach(x => txt += `${x.d} ${x.n} ${x.p}點\n${x.c}\n\n`);
             let e=document.createElement('textarea'); e.value=txt.trim(); document.body.appendChild(e); e.select(); document.execCommand('copy'); e.remove();
-            this.msg(`📋 已複製${t==='new'?'新群':'舊群'}清單`);
+            this.msg(`📋 已成功複製 ${t==='new'?'🆕 新群':'🗄️ 舊群'}清單`);
         },
-        msg(m) { let t=document.getElementById('toast'); t.innerText=m; t.style.bottom='40px'; setTimeout(()=>t.style.bottom='-50px',2000); },
+        msg(m) { let t=document.getElementById('toast'); t.innerText=m; t.style.bottom='40px'; setTimeout(()=>t.style.bottom='-60px', 2500); },
         op(c) { this.tId=c; document.getElementById('mod').style.display='flex'; },
-        rep(t) { this.st.b[this.tId]=t; this.sv(); document.getElementById('mod').style.display='none'; this.msg('✅ 已標記失效'); },
-        reset() { if(confirm('確定清空紀錄？')){ localStorage.removeItem('gData'); location.reload(); } }
+        rep(t) { this.st.b[this.tId]=t; this.sv(); document.getElementById('mod').style.display='none'; this.msg(`✅ 已標記為${t}`); },
+        reset() { if(confirm('確定要清空所有領取與暫存紀錄嗎？')){ localStorage.removeItem('gData'); location.reload(); } }
     };
     app.init();
     </script>
 </body>
 </html>
+
