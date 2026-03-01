@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>贏麻小助手 V5</title>
+    <title>贏麻小助手 V5.1</title>
     
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/ox0114xo/Gift-code/refs/heads/main/IMG_20260220_102243.png">
     <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/ox0114xo/Gift-code/refs/heads/main/IMG_20260220_102243.png">
@@ -14,66 +14,56 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
-        :root {
-            --gold: #f9d423;
-            --blue: #00c6ff;
-            --bg: #1a1a2e;
-            --glass: rgba(255, 255, 255, 0.08);
-        }
-        
+        :root { --gold: #f9d423; --blue: #00c6ff; --bg: #1a1a2e; --glass: rgba(255, 255, 255, 0.08); }
         body, html { margin: 0; padding: 0; font-family: sans-serif; background: var(--bg); color: #fff; user-select: none; min-height: 100vh; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        .wrap { max-width: 600px; margin: 0 auto; padding: 20px 15px 100px; }
         
-        .wrap { max-width: 600px; margin: 0 auto; padding: 20px 15px; }
-        
-        /* Header */
+        /* Header & Profile */
         .header { text-align: center; margin-bottom: 20px; }
         .logo-img { width: 70px; height: 70px; border-radius: 18px; border: 2px solid var(--gold); box-shadow: 0 0 15px rgba(249, 212, 35, 0.3); }
         h2 { margin: 10px 0; font-size: 1.8rem; background: linear-gradient(to right, #f9d423, #ff4e50); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; }
         
-        /* 成就面板 */
         .profile { background: var(--glass); border-radius: 20px; padding: 18px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px; backdrop-filter: blur(10px); }
         .p-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .badge { background: linear-gradient(135deg, #f9d423, #f83600); padding: 4px 12px; border-radius: 50px; font-weight: 900; font-size: 0.85rem; }
+        .badge { background: linear-gradient(135deg, #f9d423, #f83600); padding: 4px 12px; border-radius: 50px; font-weight: 900; font-size: 0.85rem; color: #fff; }
         .stats { display: flex; gap: 10px; margin-bottom: 12px; }
         .stat-box { flex: 1; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 12px; text-align: center; }
         .stat-box span { font-size: 0.75rem; color: #aaa; display: block; }
         .stat-box strong { font-size: 1.3rem; color: #fff; }
-        
         .prog-bg { background: rgba(0,0,0,0.3); height: 8px; border-radius: 10px; overflow: hidden; }
         .prog-bar { height: 100%; background: linear-gradient(90deg, #00c6ff, #0072ff); width: 0%; transition: width 0.6s; }
 
-        /* 控制區 */
-        .ctrl { display: flex; background: rgba(0,0,0,0.3); padding: 5px; border-radius: 50px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.1); }
-        .ctrl button { flex: 1; padding: 10px; border: none; background: none; color: #888; font-weight: bold; cursor: pointer; border-radius: 40px; }
-        .ctrl button.on { background: #fff; color: #1a1a2e; }
+        /* 上方控制區：排序與區域切換 */
+        .top-ctrl { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+        .btn-group { display: flex; background: rgba(0,0,0,0.3); padding: 5px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-group button { flex: 1; padding: 10px; border: none; background: none; color: #888; font-weight: bold; cursor: pointer; border-radius: 40px; transition: 0.2s; }
+        .btn-group button.on { background: #fff; color: #1a1a2e; }
         
-        .img-btns { display: flex; gap: 10px; margin-bottom: 20px; }
-        .btn-action { flex: 1; padding: 12px; border-radius: 12px; border: none; font-weight: bold; cursor: pointer; color: #fff; }
-        .btn-new { background: #ff416c; }
-        .btn-old { background: #4b6cb7; }
-        
-        /* 卡片 */
+        /* 卡片樣式 */
         .card { background: var(--glass); padding: 18px; border-radius: 20px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); position: relative; }
         .card.r { opacity: 0.4; }
         .card.p { border-color: var(--gold); }
         .card.b { border-color: #e74c3c; }
-        
         .c-info { display: flex; justify-content: space-between; margin-bottom: 12px; align-items: center; }
         .c-pts { background: var(--gold); color: #000; padding: 3px 8px; border-radius: 6px; font-weight: 900; }
         .c-date { font-size: 0.8rem; color: #888; margin-left: 5px; }
         .c-note { font-size: 0.85rem; color: #aaa; max-width: 50%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        
         .code { background: rgba(0,0,0,0.4); color: var(--blue); padding: 15px; text-align: center; border-radius: 12px; font-family: monospace; font-size: 1.4rem; font-weight: 900; border: 1px dashed var(--blue); margin-bottom: 12px; cursor: pointer; }
-        
         .acts { display: flex; justify-content: space-between; align-items: center; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.05); }
         .acts a { font-size: 0.8rem; color: #888; text-decoration: none; cursor: pointer; background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 8px; }
         .check { display: flex; align-items: center; gap: 5px; font-weight: bold; font-size: 0.9rem; }
-        
+
+        /* 底部下載區域 */
+        .bottom-actions { margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; }
+        .tip-box { font-size: 0.85rem; color: #888; margin-bottom: 15px; background: rgba(249, 212, 35, 0.1); color: var(--gold); padding: 10px; border-radius: 10px; display: inline-block; }
+        .img-btns { display: flex; gap: 10px; }
+        .btn-dl { flex: 1; padding: 15px; border-radius: 15px; border: none; font-weight: 900; cursor: pointer; color: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        .btn-new { background: linear-gradient(135deg, #ff416c, #ff4b2b); }
+        .btn-old { background: linear-gradient(135deg, #4b6cb7, #182848); }
+
         /* Toast */
-        #toast { position: fixed; bottom: -50px; left: 50%; transform: translateX(-50%); background: #fff; color: #000; padding: 10px 20px; border-radius: 50px; font-weight: bold; transition: 0.3s; z-index: 10000; }
-        
-        /* Modal */
+        #toast { position: fixed; bottom: -60px; left: 50%; transform: translateX(-50%); background: #fff; color: #000; padding: 10px 20px; border-radius: 50px; font-weight: bold; transition: 0.3s; z-index: 10000; }
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); align-items: center; justify-content: center; z-index: 999; }
         .m-box { background: #1a1a2e; padding: 25px; border-radius: 20px; width: 80%; border: 1px solid var(--glass); text-align: center; }
     </style>
@@ -94,23 +84,29 @@
             <div class="prog-bg"><div id="v-bar" class="prog-bar"></div></div>
         </div>
 
-        <div class="ctrl">
-            <button id="s-d" class="on" onclick="app.sort('d')">📅 日期</button>
-            <button id="s-p" onclick="app.sort('p')">💰 點數</button>
-            <button id="s-f" onclick="app.filt()">📋 未領</button>
+        <div class="top-ctrl">
+            <div class="btn-group">
+                <button id="g-new" class="on" onclick="app.setGroup('new')">🆕 核心禮包</button>
+                <button id="g-old" onclick="app.setGroup('old')">📜 歷史庫存</button>
+            </div>
+            <div class="btn-group">
+                <button id="s-d" class="on" onclick="app.sort('d')">📅 日期</button>
+                <button id="s-p" onclick="app.sort('p')">💰 點數</button>
+                <button id="s-f" onclick="app.filt()">📋 隱藏已領</button>
+            </div>
         </div>
 
-        <div class="img-btns">
-            <button class="btn-action btn-new" onclick="app.makeImg('new')">🖼️ 新群戰報</button>
-            <button class="btn-action btn-old" onclick="app.makeImg('old')">🖼️ 舊群戰報</button>
-        </div>
-
-        <div id="loading" style="text-align:center; padding:20px;">載入中...</div>
+        <div id="loading" style="text-align:center; padding:20px;">🚀 正在開啟金庫...</div>
         <div id="list"></div>
-        <div id="old-btn" style="text-align:center; padding:20px;"><button onclick="app.showOld()" style="background:none; border:1px solid #444; color:#888; padding:10px 20px; border-radius:10px;">展開歷史庫存 ▼</button></div>
-        <div id="old-list" style="display:none"></div>
 
-        <div style="text-align:center; margin-top:40px; color:#444; font-size:0.7rem;" onclick="app.reset()">重置紀錄</div>
+        <div class="bottom-actions">
+            <div class="tip-box">💡 提示：下載戰報圖片後分享到群組，可避免連結被擋喔！</div>
+            <div class="img-btns">
+                <button class="btn-dl btn-new" onclick="app.makeImg('new')">🖼️ 下載新群戰報</button>
+                <button class="btn-dl btn-old" onclick="app.makeImg('old')">🖼️ 下載舊群戰報</button>
+            </div>
+            <div style="text-align:center; margin-top:30px; color:#444; font-size:0.7rem; text-decoration: underline;" onclick="app.reset()">重置本機紀錄</div>
+        </div>
     </div>
 
     <div id="toast"></div>
@@ -118,8 +114,8 @@
     <div id="mod" class="modal">
         <div class="m-box">
             <h3 style="margin:0 0 20px">回報序號失效</h3>
-            <button class="btn-action" style="background:#e74c3c; width:100%; margin-bottom:10px;" onclick="app.rep('失效')">確認失效</button>
-            <button class="btn-action" style="background:#444; width:100%;" onclick="app.close()">取消</button>
+            <button style="background:#e74c3c; width:100%; padding:15px; border-radius:10px; color:#fff; border:none; font-weight:bold;" onclick="app.rep('失效')">確認失效</button>
+            <button style="background:none; color:#888; border:none; margin-top:15px;" onclick="app.close()">取消</button>
         </div>
     </div>
 
@@ -128,7 +124,7 @@
     const CUT = 213;
 
     const app = {
-        d: [], st: JSON.parse(localStorage.getItem('gData_v5_fixed')) || { r:[], p:[], b:{}, s:'d', asc:false, f:false }, tId: null,
+        d: [], st: JSON.parse(localStorage.getItem('gData_v5_v51')) || { r:[], p:[], b:{}, s:'d', asc:false, f:false, g:'new' }, tId: null,
         init() {
             fetch(SHEET).then(r=>r.text()).then(txt=>{
                 document.getElementById('loading').style.display='none';
@@ -140,8 +136,9 @@
                 this.rnd();
             }).catch(()=>alert('資料載入失敗'));
         },
-        sv() { localStorage.setItem('gData_v5_fixed', JSON.stringify(this.st)); this.rnd(); },
+        sv() { localStorage.setItem('gData_v5_v51', JSON.stringify(this.st)); this.rnd(); },
         pd(d) { let a=d.split('/'); return a[0]*100 + +a[1]; },
+        setGroup(g) { this.st.g = g; this.sv(); },
         rnd() {
             let myCnt=0, myPts=0;
             this.d.forEach(x=>{ if(this.st.r.includes(x.c)) { myCnt++; myPts+=x.p; }});
@@ -151,25 +148,33 @@
             document.getElementById('v-bar').style.width = pct+'%';
             
             let title = "初入江湖";
-            if(myPts>500) title="略有小成"; if(myPts>1500) title="將軍"; if(myPts>3000) title="贏麻大帝";
+            if(myPts>500) title="略有小成"; if(myPts>1500) title="常勝將軍"; if(myPts>3000) title="贏麻大帝";
             document.getElementById('v-title').innerText = title;
 
-            let show = this.d.filter(x=> !this.st.f || (!this.st.r.includes(x.c) && !this.st.b[x.c]));
+            // 過濾區域與未領
+            let show = this.d.filter(x => {
+                let isGroupMatch = this.st.g === 'new' ? this.pd(x.d) >= CUT : this.pd(x.d) < CUT;
+                let isFiltMatch = !this.st.f || (!this.st.r.includes(x.c) && !this.st.b[x.c]);
+                return isGroupMatch && isFiltMatch;
+            });
+            
             show.sort((a,b)=> this.st.s==='d' ? (this.st.asc?this.pd(a.d)-this.pd(b.d):this.pd(b.d)-this.pd(a.d)) : (this.st.asc?a.p-b.p:b.p-a.p));
 
-            let hN='', hO='';
+            let h = '';
             show.forEach(x => {
                 let isR=this.st.r.includes(x.c), isB=!!this.st.b[x.c], isP=this.st.p.includes(x.c);
-                let h = `<div class="card ${isB?'b':isR?'r':isP?'p':''}">
+                h += `<div class="card ${isB?'b':isR?'r':isP?'p':''}">
                     <div class="c-info"><div><span class="c-pts">💰${x.p}</span><span class="c-date">${x.d}</span></div><div class="c-note">${x.n}</div></div>
                     <div class="code" onclick="app.cp('${x.c}')">${x.c}</div>
-                    <div class="acts"><div><a onclick="app.op('${x.c}')">失效</a><a onclick="app.tp('${x.c}')" style="margin-left:5px; color:${isP?'#f9d423':''}">暫存</a></div>
-                    <label class="check"><input type="checkbox" onchange="app.tr('${x.c}',this.checked)" ${isR?'checked':''}>已收割</label></div>
+                    <div class="acts"><div><a onclick="app.op('${x.c}')">失效回報</a><a onclick="app.tp('${x.c}')" style="margin-left:5px; color:${isP?'#f9d423':''}">暫存</a></div>
+                    <label class="check"><input type="checkbox" onchange="app.tr('${x.c}',this.checked)" ${isR?'checked':''}>已領</label></div>
                 </div>`;
-                this.pd(x.d)>=CUT ? hN+=h : hO+=h;
             });
-            document.getElementById('list').innerHTML = hN;
-            document.getElementById('old-list').innerHTML = hO;
+            document.getElementById('list').innerHTML = h || '<div style="text-align:center;color:#666;padding:40px;">目前區域沒有資料</div>';
+            
+            // 按鈕狀態更新
+            document.getElementById('g-new').className = this.st.g==='new'?'on':'';
+            document.getElementById('g-old').className = this.st.g==='old'?'on':'';
             document.getElementById('s-d').className = this.st.s==='d'?'on':'';
             document.getElementById('s-p').className = this.st.s==='p'?'on':'';
             document.getElementById('s-f').className = this.st.f?'on':'';
@@ -177,34 +182,34 @@
         cp(c) {
             if(this.st.b[c]) return;
             let el=document.createElement('textarea'); el.value=c; document.body.appendChild(el); el.select(); document.execCommand('copy'); el.remove();
-            this.msg('複製成功！');
-            if(typeof confetti==='function') confetti({particleCount:50, spread:60, origin:{y:0.7}});
+            this.msg('複製成功！福利已領取');
+            if(typeof confetti==='function') confetti({particleCount:60, spread:70, origin:{y:0.8}, colors:['#f9d423','#00c6ff']});
             if(!this.st.r.includes(c)) this.tr(c, true);
         },
         tr(c,v) { v?(this.st.r.push(c),this.st.p=this.st.p.filter(x=>x!==c)):this.st.r=this.st.r.filter(x=>x!==c); this.sv(); },
         tp(c) { this.st.p.includes(c)?this.st.p=this.st.p.filter(x=>x!==c):this.st.p.push(c); this.sv(); },
         sort(k) { if(this.st.s===k) this.st.asc=!this.st.asc; else {this.st.s=k; this.st.asc=false;} this.sv(); },
         filt() { this.st.f=!this.st.f; this.sv(); },
-        msg(m) { let t=document.getElementById('toast'); t.innerText=m; t.style.bottom='40px'; setTimeout(()=>t.style.bottom='-50px', 2000); },
+        msg(m) { let t=document.getElementById('toast'); t.innerText=m; t.style.bottom='40px'; setTimeout(()=>t.style.bottom='-60px', 2500); },
         op(c) { this.tId=c; document.getElementById('mod').style.display='flex'; },
         close() { document.getElementById('mod').style.display='none'; },
         rep(t) { this.st.b[this.tId]=t; this.close(); this.sv(); },
-        showOld() { document.getElementById('old-btn').style.display='none'; document.getElementById('old-list').style.display='block'; },
-        reset() { if(confirm('重置所有領取紀錄？')){ localStorage.clear(); location.reload(); }},
+        reset() { if(confirm('重置所有領取紀錄與成就？')){ localStorage.clear(); location.reload(); }},
         makeImg(type) {
-            this.msg('正在生成圖片...');
+            this.msg('🚀 正在產出尊榮戰報...');
             let items = this.d.filter(x=> type==='new'?this.pd(x.d)>=CUT : this.pd(x.d)<CUT).slice(0, 15);
             let box = document.createElement('div');
-            box.style.cssText = "position:absolute;left:-9999px;width:400px;background:#1a1a2e;padding:30px;color:#fff;";
-            box.innerHTML = `<h2 style="text-align:center;color:#f9d423;">贏麻戰報 (${type==='new'?'新':'舊'})</h2><p style="text-align:center;font-size:0.8rem;">網址: ppt.cc/f9c9mx</p>`;
+            box.style.cssText = "position:absolute;left:-9999px;width:420px;background:linear-gradient(135deg, #1a1a2e, #16213e);padding:40px;color:#fff;border-radius:20px;";
+            box.innerHTML = `<h2 style="text-align:center;color:#f9d423;font-size:1.8rem;margin:0;">🏆 贏麻戰報 (${type==='new'?'最新':'經典'})</h2><p style="text-align:center;color:#888;">網址一鍵複製: ppt.cc/f9c9mx</p><div style="height:1px;background:rgba(255,255,255,0.1);margin:20px 0;"></div>`;
             items.forEach(x=>{
-                box.innerHTML += `<div style="border:1px solid #333;margin-bottom:10px;padding:10px;border-radius:10px;"><div style="display:flex;justify-content:space-between;font-size:0.8rem;"><span style="color:#f9d423;">💰${x.p}</span><span>${x.d}</span></div><div style="text-align:center;font-size:1.2rem;font-weight:bold;color:#00c6ff;margin-top:5px;">${x.c}</div></div>`;
+                box.innerHTML += `<div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);margin-bottom:15px;padding:15px;border-radius:15px;"><div style="display:flex;justify-content:space-between;font-weight:bold;"><span style="color:#f9d423;">💰 ${x.p}點</span><span style="color:#aaa;">${x.d}</span></div><div style="text-align:center;font-size:1.5rem;font-weight:900;color:#00c6ff;margin-top:10px;font-family:monospace;letter-spacing:1px;">${x.c}</div></div>`;
             });
+            box.innerHTML += `<p style="text-align:center;font-size:0.7rem;color:#444;margin-top:20px;">Powered by 贏麻小助手 V5.1</p>`;
             document.body.appendChild(box);
-            html2canvas(box).then(cvs => {
-                let a = document.createElement('a'); a.href=cvs.toDataURL(); a.download='戰報.png'; a.click();
+            html2canvas(box, { scale: 2, backgroundColor: "#1a1a2e" }).then(cvs => {
+                let a = document.createElement('a'); a.href=cvs.toDataURL(); a.download=`贏麻戰報_${type}.png`; a.click();
                 document.body.removeChild(box);
-                this.msg('生成完畢！');
+                this.msg('🖼️ 戰報圖片下載成功！');
             });
         }
     };
@@ -212,3 +217,4 @@
     </script>
 </body>
 </html>
+
