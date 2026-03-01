@@ -289,7 +289,8 @@
             html2canvas(imgDom, { scale: 2, useCORS: true, backgroundColor: "#1a1a2e" }).then(canvas => {
                 let link = document.createElement('a');
                 link.href = canvas.toDataURL('image/png');
-                link.download = `贏麻戰報_${type}_${new Date().toISOString().slice(0,10)}.pnglink.click();
+                link.download = `贏麻戰報_${type}_${new Date().toISOString().slice(0,10)}.png
+                link.click();
                 document.body.removeChild(imgDom);
                 app.msg('🖼️ 戰報生成完畢！請前往相簿查看');
             });
