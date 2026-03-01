@@ -3,302 +3,210 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>贏麻小助手</title>
+    <title>贏麻小助手 V5</title>
     
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/ox0114xo/Gift-code/refs/heads/main/IMG_20260220_102243.png">
     <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/ox0114xo/Gift-code/refs/heads/main/IMG_20260220_102243.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-title" content="贏麻小助手">
     <meta name="theme-color" content="#1a1a2e">
-    <link rel="manifest" id="pwa-manifest">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
-        /* === 尊榮旗艦版 CSS (毛玻璃與暗金風格) === */
         :root {
-            --gold-light: #f9d423;
-            --gold-dark: #ff4e50;
-            --bg-grad: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --gold: #f9d423;
+            --blue: #00c6ff;
+            --bg: #1a1a2e;
+            --glass: rgba(255, 255, 255, 0.08);
         }
         
-        body, html { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg-grad); color: #fff; user-select: none; -webkit-font-smoothing: antialiased; min-height: 100vh; }
+        body, html { margin: 0; padding: 0; font-family: sans-serif; background: var(--bg); color: #fff; user-select: none; min-height: 100vh; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
-        .wrap { max-width: 600px; margin: 0 auto; padding: 20px 15px 40px; }
+        .wrap { max-width: 600px; margin: 0 auto; padding: 20px 15px; }
         
-        /* 標題與個人檔案區 */
-        .header { text-align: center; margin-bottom: 20px; animation: fadeInDown 0.6s ease; }
-        .logo-img { width: 80px; height: 80px; border-radius: 22px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); margin-bottom: 12px; border: 2px solid var(--gold-light); }
-        h2 { margin: 0; font-size: 2rem; font-weight: 900; background: linear-gradient(to right, #f9d423, #ff4e50); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 2px; }
+        /* Header */
+        .header { text-align: center; margin-bottom: 20px; }
+        .logo-img { width: 70px; height: 70px; border-radius: 18px; border: 2px solid var(--gold); box-shadow: 0 0 15px rgba(249, 212, 35, 0.3); }
+        h2 { margin: 10px 0; font-size: 1.8rem; background: linear-gradient(to right, #f9d423, #ff4e50); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; }
         
-        /* 獨家：個人成就面板 */
-        .profile-card { background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: 20px; padding: 20px; margin-bottom: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); animation: fadeInUp 0.5s ease; }
+        /* 成就面板 */
+        .profile { background: var(--glass); border-radius: 20px; padding: 18px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px; backdrop-filter: blur(10px); }
         .p-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .p-title { font-size: 0.9rem; color: #a9b0c0; font-weight: bold; }
-        .p-badge { background: linear-gradient(135deg, #f9d423, #f83600); padding: 4px 12px; border-radius: 20px; font-weight: 900; font-size: 0.9rem; color: #fff; box-shadow: 0 4px 10px rgba(249, 212, 35, 0.3); }
-        .p-stats { display: flex; gap: 10px; text-align: center; margin-bottom: 15px; }
-        .p-stat-box { flex: 1; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 16px; }
-        .p-stat-box span { display: block; font-size: 0.8rem; color: #8a94a6; margin-bottom: 4px; font-weight: bold; }
-        .p-stat-box strong { font-size: 1.6rem; color: #fff; font-weight: 900; font-family: monospace; }
-        .p-stat-box strong.gold { color: var(--gold-light); }
+        .badge { background: linear-gradient(135deg, #f9d423, #f83600); padding: 4px 12px; border-radius: 50px; font-weight: 900; font-size: 0.85rem; }
+        .stats { display: flex; gap: 10px; margin-bottom: 12px; }
+        .stat-box { flex: 1; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 12px; text-align: center; }
+        .stat-box span { font-size: 0.75rem; color: #aaa; display: block; }
+        .stat-box strong { font-size: 1.3rem; color: #fff; }
         
-        /* 獨家：智慧進度條 */
-        .progress-wrap { background: rgba(0,0,0,0.3); height: 8px; border-radius: 10px; overflow: hidden; position: relative; }
-        .progress-bar { height: 100%; background: linear-gradient(90deg, #00c6ff, #0072ff); width: 0%; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
-        .progress-text { font-size: 0.75rem; color: #8a94a6; text-align: right; margin-top: 6px; font-weight: bold; }
+        .prog-bg { background: rgba(0,0,0,0.3); height: 8px; border-radius: 10px; overflow: hidden; }
+        .prog-bar { height: 100%; background: linear-gradient(90deg, #00c6ff, #0072ff); width: 0%; transition: width 0.6s; }
 
-        /* 控制面板 */
-        .ctrl { display: flex; background: rgba(0,0,0,0.2); padding: 6px; border-radius: 50px; margin-bottom: 20px; position: sticky; top: 10px; z-index: 10; backdrop-filter: blur(10px); border: 1px solid var(--glass-border); }
-        .ctrl button { flex: 1; padding: 12px 0; border: none; border-radius: 40px; background: transparent; font-weight: 800; color: #a9b0c0; font-size: 0.95rem; cursor: pointer; transition: 0.3s; }
-        .ctrl button.on { background: #fff; color: #1a1a2e; box-shadow: 0 4px 15px rgba(255,255,255,0.2); }
+        /* 控制區 */
+        .ctrl { display: flex; background: rgba(0,0,0,0.3); padding: 5px; border-radius: 50px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.1); }
+        .ctrl button { flex: 1; padding: 10px; border: none; background: none; color: #888; font-weight: bold; cursor: pointer; border-radius: 40px; }
+        .ctrl button.on { background: #fff; color: #1a1a2e; }
         
-        /* 雙複製按鈕 */
-        .copy-btns { display: flex; gap: 12px; margin-bottom: 25px; }
-        .copy-btns .btn { flex: 1; padding: 14px 0; font-size: 0.95rem; border-radius: 16px; margin-bottom: 0; }
-        .btn-new { background: linear-gradient(135deg, #ff416c, #ff4b2b); color: #fff; box-shadow: 0 6px 15px rgba(255, 65, 108, 0.3); }
-        .btn-old { background: linear-gradient(135deg, #4b6cb7, #182848); color: #fff; box-shadow: 0 6px 15px rgba(75, 108, 183, 0.3); }
+        .img-btns { display: flex; gap: 10px; margin-bottom: 20px; }
+        .btn-action { flex: 1; padding: 12px; border-radius: 12px; border: none; font-weight: bold; cursor: pointer; color: #fff; }
+        .btn-new { background: #ff416c; }
+        .btn-old { background: #4b6cb7; }
         
-        /* 禮包卡片 */
-        .card { background: var(--glass-bg); padding: 20px; border-radius: 20px; margin-bottom: 16px; position: relative; border: 1px solid var(--glass-border); transition: 0.3s; animation: fadeInUp 0.5s ease backwards; }
-        .card:active { transform: scale(0.98); }
-        .card.r { opacity: 0.5; filter: grayscale(80%); }
-        .card.p { border-color: #f39c12; }
-        .card.b { opacity: 0.4; border-color: #e74c3c; }
+        /* 卡片 */
+        .card { background: var(--glass); padding: 18px; border-radius: 20px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); position: relative; }
+        .card.r { opacity: 0.4; }
+        .card.p { border-color: var(--gold); }
+        .card.b { border-color: #e74c3c; }
         
-        .c-top { display: flex; justify-content: space-between; margin-bottom: 16px; align-items: center; }
-        .c-points { color: #1a1a2e; font-size: 1.2rem; font-weight: 900; background: var(--gold-light); padding: 4px 10px; border-radius: 8px; box-shadow: 0 2px 8px rgba(249, 212, 35, 0.4); }
-        .c-date { background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 8px; font-size: 0.8rem; font-weight: bold; color: #ccc; margin-left: 8px; }
-        .note { color: #a9b0c0; font-size: 0.9rem; font-weight: bold; max-width: 50%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: right; }
+        .c-info { display: flex; justify-content: space-between; margin-bottom: 12px; align-items: center; }
+        .c-pts { background: var(--gold); color: #000; padding: 3px 8px; border-radius: 6px; font-weight: 900; }
+        .c-date { font-size: 0.8rem; color: #888; margin-left: 5px; }
+        .c-note { font-size: 0.85rem; color: #aaa; max-width: 50%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         
-        /* 序號框 (霓虹感) */
-        .code { background: rgba(0,0,0,0.3); color: #00c6ff; border: 1px solid rgba(0, 198, 255, 0.3); padding: 16px; text-align: center; border-radius: 12px; font-family: monospace; font-size: 1.6rem; font-weight: 900; margin-bottom: 16px; cursor: pointer; letter-spacing: 2px; transition: 0.2s; text-shadow: 0 0 10px rgba(0,198,255,0.4); }
-        .code:active { background: #00c6ff; color: #fff; transform: scale(0.97); }
+        .code { background: rgba(0,0,0,0.4); color: var(--blue); padding: 15px; text-align: center; border-radius: 12px; font-family: monospace; font-size: 1.4rem; font-weight: 900; border: 1px dashed var(--blue); margin-bottom: 12px; cursor: pointer; }
         
-        .acts { display: flex; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 14px; align-items: center; }
-        .acts a { color: #8a94a6; font-size: 0.85rem; padding: 8px 14px; background: rgba(255,255,255,0.05); border-radius: 10px; cursor: pointer; font-weight: bold; }
-        label { display: flex; align-items: center; gap: 8px; font-weight: 900; color: #fff; cursor: pointer; font-size: 0.95rem; }
-        input[type="checkbox"] { width: 22px; height: 22px; accent-color: #f9d423; cursor: pointer; }
+        .acts { display: flex; justify-content: space-between; align-items: center; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.05); }
+        .acts a { font-size: 0.8rem; color: #888; text-decoration: none; cursor: pointer; background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 8px; }
+        .check { display: flex; align-items: center; gap: 5px; font-weight: bold; font-size: 0.9rem; }
         
-        /* 通用元件 */
-        .btn { width: 100%; padding: 16px; border: none; border-radius: 16px; font-weight: 900; font-size: 1.05rem; cursor: pointer; transition: 0.2s; }
-        .tag { position: absolute; top: -1px; right: -1px; padding: 4px 12px; font-size: 0.75rem; font-weight: 900; border-radius: 0 20px 0 12px; }
-        .tag.b { background: #e74c3c; color: #fff; }
-        .tag.p { background: #f39c12; color: #fff; }
-
-        .sec-title { font-weight: 900; color: #fff; margin: 25px 0 15px; padding-left: 12px; border-left: 5px solid var(--gold-light); font-size: 1.2rem; }
+        /* Toast */
+        #toast { position: fixed; bottom: -50px; left: 50%; transform: translateX(-50%); background: #fff; color: #000; padding: 10px 20px; border-radius: 50px; font-weight: bold; transition: 0.3s; z-index: 10000; }
         
-        /* 動畫與提示 */
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-        #toast { position: fixed; bottom: -60px; left: 50%; transform: translateX(-50%); background: #fff; color: #1a1a2e; padding: 14px 28px; border-radius: 50px; transition: 0.4s; z-index: 9999; font-weight: 900; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
-        
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(5px); }
-        .m-box { background: #16213e; padding: 30px; border-radius: 24px; width: 85%; max-width: 340px; text-align: center; border: 1px solid var(--glass-border); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        /* Modal */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); align-items: center; justify-content: center; z-index: 999; }
+        .m-box { background: #1a1a2e; padding: 25px; border-radius: 20px; width: 80%; border: 1px solid var(--glass); text-align: center; }
     </style>
 </head>
 <body>
     <div class="wrap">
         <div class="header">
-            <img src="https://raw.githubusercontent.com/ox0114xo/Gift-code/refs/heads/main/IMG_20260220_102243.png" class="logo-img" alt="Logo">
+            <img src="https://raw.githubusercontent.com/ox0114xo/Gift-code/refs/heads/main/IMG_20260220_102243.png" class="logo-img">
             <h2>贏麻小助手</h2>
         </div>
-        
-        <div class="profile-card">
-            <div class="p-top">
-                <span class="p-title">👤 我的專屬成就</span>
-                <span class="p-badge" id="my-title">初入江湖</span>
+
+        <div class="profile">
+            <div class="p-top"><span>🏆 我的成就</span> <span id="v-title" class="badge">讀取中</span></div>
+            <div class="stats">
+                <div class="stat-box"><span>已領</span><strong id="v-cnt">0</strong></div>
+                <div class="stat-box"><span>累積福利</span><strong id="v-pts" style="color:var(--gold)">0</strong></div>
             </div>
-            <div class="p-stats">
-                <div class="p-stat-box">
-                    <span>已領取序號</span>
-                    <strong id="my-count">0</strong>
-                </div>
-                <div class="p-stat-box">
-                    <span>累積獲取福利</span>
-                    <strong class="gold" id="my-pts">0</strong>
-                </div>
-            </div>
-            <div class="progress-wrap">
-                <div class="progress-bar" id="my-bar"></div>
-            </div>
-            <div class="progress-text" id="my-prog-txt">領取進度：0 / 0</div>
+            <div class="prog-bg"><div id="v-bar" class="prog-bar"></div></div>
         </div>
 
         <div class="ctrl">
-            <button id="b-date" class="on" onclick="app.sort('d')">📅 日期排序</button>
-            <button id="b-pts" onclick="app.sort('p')">💰 點數排序</button>
-            <button id="b-fil" onclick="app.filt()">📋 隱藏已領</button>
+            <button id="s-d" class="on" onclick="app.sort('d')">📅 日期</button>
+            <button id="s-p" onclick="app.sort('p')">💰 點數</button>
+            <button id="s-f" onclick="app.filt()">📋 未領</button>
         </div>
 
-        <div class="copy-btns">
-            <button class="btn btn-new" onclick="app.downloadGroupImage('new')">🖼️ 產出新群戰報</button>
-            <button class="btn btn-old" onclick="app.downloadGroupImage('old')">🖼️ 產出舊群戰報</button>
+        <div class="img-btns">
+            <button class="btn-action btn-new" onclick="app.makeImg('new')">🖼️ 新群戰報</button>
+            <button class="btn-action btn-old" onclick="app.makeImg('old')">🖼️ 舊群戰報</button>
         </div>
 
-        <div id="loading" style="text-align:center;color:var(--gold-light);font-weight:900;padding:30px;font-size:1.2rem;">🚀 尊榮系統連線中...</div>
-        
-        <div class="sec-title">🔥 核心禮包區</div>
+        <div id="loading" style="text-align:center; padding:20px;">載入中...</div>
         <div id="list"></div>
+        <div id="old-btn" style="text-align:center; padding:20px;"><button onclick="app.showOld()" style="background:none; border:1px solid #444; color:#888; padding:10px 20px; border-radius:10px;">展開歷史庫存 ▼</button></div>
+        <div id="old-list" style="display:none"></div>
 
-        <button class="btn" style="background:rgba(255,255,255,0.1);color:#fff;margin-top:20px; border: 1px solid rgba(255,255,255,0.2);" onclick="document.getElementById('old').style.display='block';this.style.display='none';">📂 開啟歷史金庫 ▼</button>
-        <div id="old" style="display:none; margin-top:15px;"></div>
-
-        <div style="text-align:center; margin:50px 0 20px;"><span style="font-size:0.8rem; color:#666; cursor:pointer; font-weight:bold; padding: 10px;" onclick="app.reset()">⚠️ 重置本機系統紀錄</span></div>
+        <div style="text-align:center; margin-top:40px; color:#444; font-size:0.7rem;" onclick="app.reset()">重置紀錄</div>
     </div>
 
     <div id="toast"></div>
 
     <div id="mod" class="modal">
         <div class="m-box">
-            <h3 style="margin-top:0; color:#fff; font-weight:900;">回報失效狀態</h3>
-            <button class="btn" style="background:rgba(231, 76, 60, 0.2);color:#ff4e50;border:1px solid #ff4e50;margin-bottom:12px;" onclick="app.rep('過期')">📅 該序號已過期</button>
-            <button class="btn" style="background:rgba(231, 76, 60, 0.2);color:#ff4e50;border:1px solid #ff4e50;margin-bottom:15px;" onclick="app.rep('領完')">😫 獎勵已經領完</button>
-            <button class="btn" style="background:rgba(255,255,255,0.1);color:#fff;border:none;" onclick="document.getElementById('mod').style.display='none'">返回</button>
+            <h3 style="margin:0 0 20px">回報序號失效</h3>
+            <button class="btn-action" style="background:#e74c3c; width:100%; margin-bottom:10px;" onclick="app.rep('失效')">確認失效</button>
+            <button class="btn-action" style="background:#444; width:100%;" onclick="app.close()">取消</button>
         </div>
     </div>
 
     <script>
     const SHEET = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSkENoeJW2fV8JucN514cMysAStsgNLzjbYKrE04bDSAJOKTayexd-Ve3Fce4KB6FQsXvtMTgPZ7Mnw/pub?output=csv";
-    const CUT = 213; 
-    const icon = "https://raw.githubusercontent.com/ox0114xo/Gift-code/refs/heads/main/IMG_20260220_102243.png";
-
-    document.getElementById('pwa-manifest').href = 'data:application/manifest+json;utf-8,'+encodeURIComponent(JSON.stringify({name:"贏麻小助手",short_name:"贏麻",start_url:".",display:"standalone",background_color:"#1a1a2e",icons:[{src:icon,sizes:"192x192",type:"image/png"}]}));
+    const CUT = 213;
 
     const app = {
-        d: [], st: JSON.parse(localStorage.getItem('gData_v5')) || { r:[], p:[], b:{}, s:'d', asc:false, f:false }, tId: null,
+        d: [], st: JSON.parse(localStorage.getItem('gData_v5_fixed')) || { r:[], p:[], b:{}, s:'d', asc:false, f:false }, tId: null,
         init() {
-            fetch(SHEET).then(r=>r.text()).then(c=>{
+            fetch(SHEET).then(r=>r.text()).then(txt=>{
                 document.getElementById('loading').style.display='none';
-                let l = c.split(/\r?\n/);
-                for(let i=1; i<l.length; i++){
-                    let r = l[i].split(',');
-                    if(r[2]) this.d.push({ d:r[0].trim(), p:+r[1], c:r[2].trim(), n:r[3]||"" });
-                }
+                let rows = txt.split('\n').slice(1);
+                rows.forEach(row => {
+                    let cols = row.split(',');
+                    if(cols[2]) this.d.push({ d:cols[0].trim(), p:+cols[1], c:cols[2].trim(), n:cols[3]||"" });
+                });
                 this.rnd();
-            }).catch(()=>document.getElementById('loading').innerText='⚠️ 網路異常，請重整');
+            }).catch(()=>alert('資料載入失敗'));
         },
-        sv() { localStorage.setItem('gData_v5', JSON.stringify(this.st)); this.rnd(); },
+        sv() { localStorage.setItem('gData_v5_fixed', JSON.stringify(this.st)); this.rnd(); },
         pd(d) { let a=d.split('/'); return a[0]*100 + +a[1]; },
-        
-        // ⭐️ 核心功能：計算個人成就與進度
-        calcVIP() {
-            let myPts = 0; let myCnt = 0; let totalValid = 0;
-            this.d.forEach(x => {
-                if(!this.st.b[x.c]) totalValid++; // 扣除失效的總數
-                if(this.st.r.includes(x.c)) { myPts += x.p; myCnt++; }
-            });
-            
-            // 設定尊榮稱號門檻
-            let title = "初入江湖 🐣";
-            if(myPts >= 500) title = "略有小成 🗡️";
-            if(myPts >= 1500) title = "常勝將軍 🛡️";
-            if(myPts >= 3000) title = "登峰造極 🌟";
-            if(myPts >= 5000) title = "贏麻大帝 👑";
-
-            document.getElementById('my-title').innerText = title;
-            document.getElementById('my-count').innerText = myCnt;
-            document.getElementById('my-pts').innerText = myPts.toLocaleString();
-            
-            let pct = totalValid === 0 ? 0 : Math.round((myCnt / totalValid) * 100);
-            document.getElementById('my-bar').style.width = pct + '%';
-            document.getElementById('my-prog-txt').innerText = `收割進度：${myCnt} / ${totalValid} (${pct}%)`;
-        },
-
         rnd() {
-            this.calcVIP(); // 更新成就
-            let a=this.d.filter(x=>{ return !this.st.f || (!this.st.r.includes(x.c) && !this.st.b[x.c]); });
-            a.sort((x,y) => this.st.s==='d' ? (this.st.asc ? this.pd(x.d)-this.pd(y.d) : this.pd(y.d)-this.pd(x.d)) : (this.st.asc ? x.p-y.p : y.p-x.p));
+            let myCnt=0, myPts=0;
+            this.d.forEach(x=>{ if(this.st.r.includes(x.c)) { myCnt++; myPts+=x.p; }});
+            document.getElementById('v-cnt').innerText = myCnt;
+            document.getElementById('v-pts').innerText = myPts.toLocaleString();
+            let pct = Math.min(100, (myCnt/Math.max(1, this.d.length))*100);
+            document.getElementById('v-bar').style.width = pct+'%';
             
+            let title = "初入江湖";
+            if(myPts>500) title="略有小成"; if(myPts>1500) title="將軍"; if(myPts>3000) title="贏麻大帝";
+            document.getElementById('v-title').innerText = title;
+
+            let show = this.d.filter(x=> !this.st.f || (!this.st.r.includes(x.c) && !this.st.b[x.c]));
+            show.sort((a,b)=> this.st.s==='d' ? (this.st.asc?this.pd(a.d)-this.pd(b.d):this.pd(b.d)-this.pd(a.d)) : (this.st.asc?a.p-b.p:b.p-a.p));
+
             let hN='', hO='';
-            a.forEach((x, i) => {
-                let isR=this.st.r.includes(x.c), isP=this.st.p.includes(x.c), isB=!!this.st.b[x.c];
-                let delay = i < 15 ? `style="animation-delay: ${i*0.04}s"` : '';
-                let h = `<div class="card ${isB?'b':isR?'r':isP?'p':''}" ${delay}>${isB?'<div class="tag b">已失效</div>':isP?'<div class="tag p">⏳ 暫存</div>':''}<div class="c-top"><div style="display:flex;align-items:center;"><span class="c-points">💰${x.p}</span><span class="c-date">${x.d}</span></div><div class="note">${x.n}</div></div><div class="code" onclick="app.cp('${x.c}')">${x.c}</div><div class="acts"><div><a onclick="app.op('${x.c}')">⚠️回報</a><a onclick="app.tp('${x.c}')" style="margin-left:8px;color:${isP?'#f39c12':'#8a94a6'}">⏳暫存</a></div><label><input type="checkbox" onchange="app.tr('${x.c}',this.checked)" ${isR?'checked':''}>已收割</label></div></div>`;
+            show.forEach(x => {
+                let isR=this.st.r.includes(x.c), isB=!!this.st.b[x.c], isP=this.st.p.includes(x.c);
+                let h = `<div class="card ${isB?'b':isR?'r':isP?'p':''}">
+                    <div class="c-info"><div><span class="c-pts">💰${x.p}</span><span class="c-date">${x.d}</span></div><div class="c-note">${x.n}</div></div>
+                    <div class="code" onclick="app.cp('${x.c}')">${x.c}</div>
+                    <div class="acts"><div><a onclick="app.op('${x.c}')">失效</a><a onclick="app.tp('${x.c}')" style="margin-left:5px; color:${isP?'#f9d423':''}">暫存</a></div>
+                    <label class="check"><input type="checkbox" onchange="app.tr('${x.c}',this.checked)" ${isR?'checked':''}>已收割</label></div>
+                </div>`;
                 this.pd(x.d)>=CUT ? hN+=h : hO+=h;
             });
-            document.getElementById('list').innerHTML = hN || '<div style="text-align:center;color:#8a94a6;padding:20px;">無符合資料</div>';
-            document.getElementById('old').innerHTML = hO || '<div style="text-align:center;color:#8a94a6;padding:20px;">無符合資料</div>';
-            
-            document.getElementById('b-date').className=this.st.s==='d'?'on':'';
-            document.getElementById('b-pts').className=this.st.s==='p'?'on':'';
-            document.getElementById('b-fil').className=this.st.f?'on':'';
+            document.getElementById('list').innerHTML = hN;
+            document.getElementById('old-list').innerHTML = hO;
+            document.getElementById('s-d').className = this.st.s==='d'?'on':'';
+            document.getElementById('s-p').className = this.st.s==='p'?'on':'';
+            document.getElementById('s-f').className = this.st.f?'on':'';
         },
-        sort(k) { this.st.asc = (this.st.s===k) ? !this.st.asc : false; this.st.s=k; this.sv(); },
-        filt() { this.st.f = !this.st.f; this.sv(); },
-        
-        // ⭐️ 觸發全螢幕撒花特效
-        fireConfetti() {
-            if (typeof confetti === 'function') {
-                confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 }, colors: ['#f9d423', '#ff4e50', '#00c6ff', '#ffffff'] });
-            }
+        cp(c) {
+            if(this.st.b[c]) return;
+            let el=document.createElement('textarea'); el.value=c; document.body.appendChild(el); el.select(); document.execCommand('copy'); el.remove();
+            this.msg('複製成功！');
+            if(typeof confetti==='function') confetti({particleCount:50, spread:60, origin:{y:0.7}});
+            if(!this.st.r.includes(c)) this.tr(c, true);
         },
-
-        tr(c, v) { 
-            if(v) { 
-                this.st.r.push(c); this.st.p=this.st.p.filter(x=>x!==c); 
-                this.fireConfetti(); // 勾選已領取也觸發撒花
-            } else { 
-                this.st.r=this.st.r.filter(x=>x!==c); 
-            } 
-            this.sv(); 
-        },
-        tp(c) { this.st.p.includes(c) ? this.st.p=this.st.p.filter(x=>x!==c) : this.st.p.push(c); this.sv(); },
-        
-        cp(c) { 
-            if(this.st.b[c]) return this.msg('⚠️ 序號已失效');
-            let e=document.createElement('textarea'); e.value=c; document.body.appendChild(e); e.select(); document.execCommand('copy'); e.remove();
-            this.msg('✅ 複製成功！福利入袋！');
-            this.fireConfetti(); // 複製成功撒花
-            if(!this.st.r.includes(c)) this.tr(c,true); // 自動打勾並存檔更新進度
-        },
-        
-        // ⭐️ 升級版：尊榮戰報圖檔生成
-        downloadGroupImage(type) {
-            if (typeof html2canvas === 'undefined') return this.msg('⚠️ 圖片模組載入中，請稍後');
-            let arr = this.d.filter(x => type==='new' ? this.pd(x.d)>=CUT : this.pd(x.d)<CUT).sort((x,y) => this.pd(y.d) - this.pd(x.d));
-            if(arr.length === 0) return this.msg(`⚠️ 暫無${type==='new'?'新群':'舊群'}資料`);
-
-            this.msg('🚀 正在為您生成專屬戰報...');
-
-            let imgDom = document.createElement('div');
-            // 高質感深色漸層背景
-            imgDom.style.cssText = "position:absolute; left:-10000px; top:0; width:480px; background:linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding:40px; font-family: -apple-system, sans-serif; color:#fff; box-sizing:border-box; border-radius: 20px;";
-            
-            imgDom.innerHTML = `<div style="text-align:center; font-weight:900; font-size:1.2rem; color:#f9d423; padding-bottom:20px; border-bottom:1px solid rgba(255,255,255,0.1); margin-bottom: 20px;">👉 網頁一鍵複製連結：<br><span style="color:#fff;font-size:1.4rem;display:inline-block;margin-top:10px;background:rgba(255,255,255,0.1);padding:5px 15px;border-radius:10px;">ppt.cc/f9c9mx</span></div>`;
-            imgDom.innerHTML += `<h2 style="text-align:center; font-size:2rem; font-weight:900; color:#fff; margin: 0 0 30px; text-shadow: 0 4px 10px rgba(0,0,0,0.5);">🏆 ${type==='new'?'最新首發':'經典典藏'} 禮包戰報</h2>`;
-
-            let listTxt = '';
-            arr.forEach(x => {
-                listTxt += `<div style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:20px; border-radius:16px; margin-bottom:15px; box-shadow:0 10px 20px rgba(0,0,0,0.2);">
-                    <div style="display:flex; justify-content:space-between; margin-bottom:12px; font-weight:bold; font-size:1.1rem;">
-                        <span style="color:#f9d423; background:rgba(0,0,0,0.3); padding:4px 12px; border-radius:8px;">💰 ${x.p}點</span>
-                        <span style="color:#a9b0c0;">${x.d} ${x.n}</span>
-                    </div>
-                    <div style="font-family:monospace; font-size:1.8rem; color:#00c6ff; text-align:center; padding:15px; background:rgba(0,0,0,0.4); border:2px dashed rgba(0,198,255,0.4); border-radius:12px; font-weight:900; letter-spacing:2px;">${x.c}</div>
-                </div>`;
-            });
-            imgDom.innerHTML += `<div>${listTxt}</div>`;
-            imgDom.innerHTML += `<div style="text-align:center; color:#666; font-size:0.9rem; margin-top:30px; font-weight:bold;">Powered by 贏麻小助手 V5尊榮版</div>`;
-
-            document.body.appendChild(imgDom);
-
-            html2canvas(imgDom, { scale: 2, useCORS: true, backgroundColor: "#1a1a2e" }).then(canvas => {
-                let link = document.createElement('a');
-                link.href = canvas.toDataURL('image/png');
-                link.download = `贏麻戰報_${type}_${new Date().toISOString().slice(0,10)}.png
-                link.click();
-                document.body.removeChild(imgDom);
-                app.msg('🖼️ 戰報生成完畢！請前往相簿查看');
-            });
-        },
-        msg(m) { let t=document.getElementById('toast'); t.innerText=m; t.classList.add('show'); t.style.bottom='40px'; setTimeout(()=>{t.style.bottom='-60px'; t.classList.remove('show');},2500); },
+        tr(c,v) { v?(this.st.r.push(c),this.st.p=this.st.p.filter(x=>x!==c)):this.st.r=this.st.r.filter(x=>x!==c); this.sv(); },
+        tp(c) { this.st.p.includes(c)?this.st.p=this.st.p.filter(x=>x!==c):this.st.p.push(c); this.sv(); },
+        sort(k) { if(this.st.s===k) this.st.asc=!this.st.asc; else {this.st.s=k; this.st.asc=false;} this.sv(); },
+        filt() { this.st.f=!this.st.f; this.sv(); },
+        msg(m) { let t=document.getElementById('toast'); t.innerText=m; t.style.bottom='40px'; setTimeout(()=>t.style.bottom='-50px', 2000); },
         op(c) { this.tId=c; document.getElementById('mod').style.display='flex'; },
-        rep(t) { this.st.b[this.tId]=t; this.sv(); document.getElementById('mod').style.display='none'; this.msg(`✅ 已回報系統：${t}`); },
-        reset() { if(confirm('⚠️ 警告：這將會清除您目前所有的「專屬成就、領取進度與暫存」，確定要重置嗎？')){ localStorage.removeItem('gData_v5'); location.reload(); } }
+        close() { document.getElementById('mod').style.display='none'; },
+        rep(t) { this.st.b[this.tId]=t; this.close(); this.sv(); },
+        showOld() { document.getElementById('old-btn').style.display='none'; document.getElementById('old-list').style.display='block'; },
+        reset() { if(confirm('重置所有領取紀錄？')){ localStorage.clear(); location.reload(); }},
+        makeImg(type) {
+            this.msg('正在生成圖片...');
+            let items = this.d.filter(x=> type==='new'?this.pd(x.d)>=CUT : this.pd(x.d)<CUT).slice(0, 15);
+            let box = document.createElement('div');
+            box.style.cssText = "position:absolute;left:-9999px;width:400px;background:#1a1a2e;padding:30px;color:#fff;";
+            box.innerHTML = `<h2 style="text-align:center;color:#f9d423;">贏麻戰報 (${type==='new'?'新':'舊'})</h2><p style="text-align:center;font-size:0.8rem;">網址: ppt.cc/f9c9mx</p>`;
+            items.forEach(x=>{
+                box.innerHTML += `<div style="border:1px solid #333;margin-bottom:10px;padding:10px;border-radius:10px;"><div style="display:flex;justify-content:space-between;font-size:0.8rem;"><span style="color:#f9d423;">💰${x.p}</span><span>${x.d}</span></div><div style="text-align:center;font-size:1.2rem;font-weight:bold;color:#00c6ff;margin-top:5px;">${x.c}</div></div>`;
+            });
+            document.body.appendChild(box);
+            html2canvas(box).then(cvs => {
+                let a = document.createElement('a'); a.href=cvs.toDataURL(); a.download='戰報.png'; a.click();
+                document.body.removeChild(box);
+                this.msg('生成完畢！');
+            });
+        }
     };
     app.init();
     </script>
