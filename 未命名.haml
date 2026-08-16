@@ -1,0 +1,593 @@
+<!--
+修改點說明：
+1. 視覺與定位轉換：將頁面從「學術介紹」全面改為「商業銷售落地頁（Landing Page）」。
+2. 行銷元素強化：於主視覺區塊加入「NT$ 150」價格標籤，並新增醒目的 LINE 客服脈衝動畫按鈕（CTA）。
+3. 文案調整：表格內容改為「商品規格與價值對比」，流程區塊改為「開通三步驟（聯繫客服 -> 獲取連結 -> 綁定）」。
+4. 預防客訴機制：新增「購買前必讀須知（免責聲明）」區塊，將灰產相關的風險條款以合理的「福利特惠/風險自負」包裝。
+5. 動畫與樣式擴充：增加按鈕的 @keyframes pulseBtn 動畫，並補齊銷售相關的 CSS 樣式。
+-->
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google AI Pro 5TB 18個月專屬升級｜福利直充</title>
+    <style>
+        :root {
+            --g-blue: #4285F4;
+            --g-red: #EA4335;
+            --g-yellow: #FBBC05;
+            --g-green: #34A853;
+            --line-green: #06C755;
+            --text-dark: #202124;
+            --text-gray: #5f6368;
+            --bg-light: #f8f9fa;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* 動畫定義 */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInLeft {
+            from { opacity: 0; transform: translateX(-16px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes pulseDot {
+            0% { box-shadow: 0 0 0 0 rgba(66, 133, 244, 0.4); }
+            70% { box-shadow: 0 0 0 8px rgba(66, 133, 244, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(66, 133, 244, 0); }
+        }
+        @keyframes pulseBtn {
+            0% { box-shadow: 0 0 0 0 rgba(6, 199, 85, 0.5); }
+            70% { box-shadow: 0 0 0 15px rgba(6, 199, 85, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(6, 199, 85, 0); }
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* 主視覺區塊 */
+        .hero {
+            background: linear-gradient(-45deg, #ffffff, #f1f3f4, #e8eaed, #ffffff);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite, fadeInDown 0.8s ease-out;
+            border-radius: 24px;
+            padding: 50px 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 6px;
+            background: linear-gradient(90deg, var(--g-blue), var(--g-red), var(--g-yellow), var(--g-green));
+        }
+
+        .hero svg.main-icon {
+            margin-bottom: 15px;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .hero h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+            color: var(--text-dark);
+            font-weight: 800;
+        }
+        
+        .hero p {
+            font-size: 18px;
+            color: var(--text-gray);
+            margin-bottom: 25px;
+        }
+
+        /* 價格與按鈕 */
+        .price-tag {
+            display: inline-block;
+            background: rgba(234, 67, 53, 0.1);
+            color: var(--g-red);
+            padding: 10px 30px;
+            border-radius: 50px;
+            font-size: 32px;
+            font-weight: 900;
+            border: 2px solid rgba(234, 67, 53, 0.2);
+            margin-bottom: 25px;
+        }
+
+        .cta-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            background: var(--line-green);
+            color: white;
+            text-decoration: none;
+            padding: 18px 40px;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 50px;
+            box-shadow: 0 8px 20px rgba(6, 199, 85, 0.3);
+            transition: transform 0.2s;
+            max-width: 400px;
+            margin: 0 auto;
+            animation: pulseBtn 2s infinite;
+        }
+
+        .cta-button:active {
+            transform: scale(0.96);
+        }
+
+        /* 表格樣式優化 */
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            margin-bottom: 40px;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .info-table th, .info-table td {
+            padding: 18px 20px;
+            border-bottom: 1px solid #f1f3f4;
+            text-align: left;
+            font-size: 16px;
+        }
+
+        .info-table th {
+            background-color: #fafbfc;
+            width: 30%;
+            color: var(--g-blue);
+            font-weight: 700;
+        }
+
+        .info-table tr:last-child th, .info-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* 特色功能卡片 */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .feature-card {
+            background: #fff;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+            border: 1px solid transparent;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.08);
+            border-color: #e8eaed;
+        }
+
+        .feature-icon {
+            margin-bottom: 20px;
+            display: inline-block;
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1);
+        }
+
+        .icon-blue { color: var(--g-blue); }
+        .icon-red { color: var(--g-red); }
+        .icon-green { color: var(--g-green); }
+
+        .feature-card h3 {
+            font-size: 20px;
+            margin-bottom: 12px;
+        }
+
+        .feature-card ul {
+            list-style: none;
+            padding: 0;
+            color: var(--text-gray);
+        }
+
+        .feature-card ul li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 8px;
+        }
+
+        .feature-card ul li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--g-blue);
+            font-weight: bold;
+        }
+
+        /* 步驟列表 */
+        .steps-container {
+            background: #fff;
+            padding: 35px 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            animation: fadeInUp 0.8s ease-out 0.6s both;
+            margin-bottom: 40px;
+        }
+
+        .steps-container h2 {
+            color: var(--text-dark);
+            border-bottom: 3px solid var(--g-blue);
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+            display: inline-block;
+        }
+
+        .step-list {
+            list-style: none;
+            counter-reset: steps;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .step-list li {
+            position: relative;
+            padding-left: 60px;
+            background: #f8f9fa;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            padding-right: 20px;
+            border-radius: 12px;
+            transition: transform 0.2s;
+        }
+
+        .step-list li:hover {
+            transform: translateX(10px);
+            background: #f1f3f4;
+        }
+
+        .step-list li::before {
+            counter-increment: steps;
+            content: counter(steps);
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 36px;
+            height: 36px;
+            background: var(--g-blue);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+            box-shadow: 0 4px 10px rgba(66, 133, 244, 0.3);
+        }
+
+        /* 免責與風控聲明區塊 */
+        .warning-box {
+            background: #fce8e6;
+            border-left: 6px solid var(--g-red);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            animation: fadeInUp 0.8s ease-out 0.7s both;
+        }
+
+        .warning-box h3 {
+            color: #d93025;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+
+        .warning-box ul {
+            padding-left: 20px;
+            color: #b00020;
+            font-size: 15px;
+        }
+
+        .warning-box li {
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        /* Gemini 進化時間軸 (保留以增加產品價值感) */
+        .evolution-container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            animation: fadeInUp 0.8s ease-out 0.8s both;
+            margin-bottom: 40px;
+        }
+
+        .evolution-container h2 {
+            color: var(--text-dark);
+            border-bottom: 2px solid var(--g-red);
+            padding-bottom: 10px;
+            margin-bottom: 8px;
+            display: inline-block;
+        }
+
+        .evolution-sub {
+            color: var(--text-gray);
+            font-size: 14px;
+            margin-bottom: 28px;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 28px;
+            border-left: 2px solid #e8eaed;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 28px;
+        }
+
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -34px;
+            top: 4px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--g-blue);
+            border: 3px solid #fff;
+            box-shadow: 0 0 0 1px #e8eaed;
+            animation: pulseDot 2.4s infinite;
+        }
+
+        .timeline-item.latest::before {
+            background: var(--g-red);
+        }
+
+        .timeline-date {
+            display: inline-block;
+            font-size: 12.5px;
+            font-weight: 700;
+            color: var(--g-blue);
+            background: #eef3fe;
+            padding: 3px 10px;
+            border-radius: 999px;
+            margin-bottom: 8px;
+        }
+
+        .timeline-item.latest .timeline-date {
+            color: var(--g-red);
+            background: #fdecea;
+        }
+
+        .timeline-item h4 {
+            font-size: 16.5px;
+            margin-bottom: 4px;
+        }
+
+        .timeline-item p {
+            color: var(--text-gray);
+            font-size: 14px;
+        }
+
+        .badge-new {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 700;
+            color: #fff;
+            background: var(--g-red);
+            padding: 2px 8px;
+            border-radius: 999px;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
+        .evolution-note {
+            margin-top: 24px;
+            padding: 14px 18px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            font-size: 13.5px;
+            color: var(--text-gray);
+            border-left: 3px solid var(--g-blue);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <!-- 銷售主視覺 -->
+        <header class="hero">
+            <svg class="main-icon" width="72" height="72" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="iconGrad" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="#4285F4"/>
+                        <stop offset="100%" stop-color="#EA4335"/>
+                    </linearGradient>
+                </defs>
+                <path d="M12 2L2 7l10 5 10-5-10-5z" fill="url(#iconGrad)"/>
+                <path d="M2 17l10 5 10-5M2 12l10 5 10-5" stroke="url(#iconGrad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <h1>解鎖 Google AI Pro 5TB</h1>
+            <p>官方直充｜18 個月專屬資格｜免帳密｜獨立享用</p>
+            
+            <div class="price-tag">NT$ 150 <span style="font-size: 18px; font-weight: normal;">(福利限定)</span></div>
+            
+<!-- 請將原 HTML 文件中 <header class="hero"> 區塊內的 <a> 標籤替換為以下代碼 -->
+<!-- 已將 href 替換為從 QR Code 解析出的 LINE 群組連結 -->
+<a href="https://lin.ee/U2zTmN4" class="cta-button">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+        <path d="M24 10.3c0-4.3-4.1-7.9-9.9-7.9S4.2 6 4.2 10.3c0 3.8 3.2 7 8.1 7.7.3.1.8.3.9.7l.2 1.9c0 .2.2.4.4.2 1.3-.9 4.3-3.1 6.5-5.3 2.4-2.2 3.7-4.1 3.7-5.2z"/>
+    </svg>
+    立即聯繫 LINE 客服下單
+</a>
+
+        </header>
+
+        <!-- 方案規格對比 -->
+        <table class="info-table">
+            <tr>
+                <th>方案內容</th>
+                <td>獨享 5TB 雲端空間 + 解鎖 Gemini 3 Pro 頂級模型</td>
+            </tr>
+            <tr>
+                <th>官方總價值</th>
+                <td>約 NT$ 11,700 （每月 $650 × 18 個月）</td>
+            </tr>
+            <tr>
+                <th>福利直充價</th>
+                <td><strong>NT$ 150 買斷專屬領取資格</strong></td>
+            </tr>
+            <tr>
+                <th>隱私與安全</th>
+                <td>完全免提供帳號密碼，透過官方專屬連結自主點擊綁定</td>
+            </tr>
+        </table>
+
+        <!-- 核心優勢展示 -->
+        <section class="features">
+            <div class="feature-card">
+                <svg class="feature-icon icon-blue" width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 18h10a4 4 0 0 0 .4-7.98A5.5 5.5 0 0 0 7.1 9.02 4.5 4.5 0 0 0 7 18z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                </svg>
+                <h3>5TB 雲端大空間</h3>
+                <ul>
+                    <li>Drive、相簿、Gmail 容量大升級</li>
+                    <li>告別空間不足焦慮，檔案隨便塞</li>
+                    <li>支援原畫質相片備份與家庭共享</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <svg class="feature-icon icon-red" width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="7" y="7" width="10" height="10" rx="2" stroke="currentColor" stroke-width="2"/>
+                    <path d="M9 3v2M12 3v2M15 3v2M9 19v2M12 19v2M15 19v2M3 9h2M3 12h2M3 15h2M19 9h2M19 12h2M19 15h2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <h3>Gemini AI Pro 權限</h3>
+                <ul>
+                    <li>享有最高級別 AI 模型對話權限</li>
+                    <li>處理複雜邏輯與進階程式碼編寫</li>
+                    <li>優先體驗 Google 最新 AI 黑科技</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <svg class="feature-icon icon-green" width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                    <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <h3>Workspace 深度整合</h3>
+                <ul>
+                    <li>在 Docs、Gmail 內建呼叫 AI 寫作</li>
+                    <li>一鍵總結超長信件與會議記錄</li>
+                    <li>大幅提升個人與辦公生產力</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 購買與開通流程 -->
+        <div class="steps-container">
+            <h2>開通三步驟</h2>
+            <ul class="step-list">
+                <li><strong>聯繫客服下單付款：</strong>點擊頁面按鈕前往 LINE 官方帳號，完成 150 元匯款。</li>
+                <li><strong>獲取專屬綁定連結：</strong>確認款項後，客服將即時發送一組您的「專屬 Google One 啟用連結」。</li>
+                <li><strong>一鍵點擊完成升級：</strong>在瀏覽器登入您要升級的 Google 帳號，點擊該連結並按下確認，瞬間完成綁定！</li>
+            </ul>
+        </div>
+
+        <!-- 買賣糾紛預防 (免責聲明) -->
+        <section class="warning-box">
+            <h3>⚠️ 購買前必讀須知 (下單即視同同意)</h3>
+            <ul>
+                <li><strong>特殊福利渠道：</strong>此為利用海外特殊補貼活動提取之獨立連結，定價極低，純屬福利性質，用滿即賺到。</li>
+                <li><strong>售出不退不換：</strong>專屬綁定連結一經發送即視同交付完成，恕不接受任何理由退款。</li>
+                <li><strong>風險自負原則：</strong>後續權限受 Google 官方風控政策影響，不保證穩定用滿 18 個月，亦不保證不掉訂閱或封鎖。</li>
+                <li><strong>帳號安全建議：</strong>為保障您的主帳號資料安全，強烈建議使用「非主力之備用帳號 (小號)」進行綁定與操作。</li>
+            </ul>
+        </section>
+
+        <!-- 增加產品信任感的更新時間軸 -->
+        <div class="evolution-container">
+            <h2>Gemini 持續進化</h2>
+            <p class="evolution-sub">訂閱期間內，您的帳號將持續獲得 Google 最新模型的無縫升級，無需額外付費。</p>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <span class="timeline-date">2025 / 11</span>
+                    <h4>Gemini 3 發布</h4>
+                    <p>推理與多模態能力全面升級，並首度於發布當日同步整合進 Google Search 的 AI Mode。</p>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-date">2026 / 04</span>
+                    <h4>儲存空間由 2TB 免費升級至 5TB</h4>
+                    <p>Google AI Pro 全球方案儲存空間擴增至 5TB，所有既有訂閱用戶自動生效，加量不加價。</p>
+                </div>
+                <div class="timeline-item latest">
+                    <span class="timeline-date">2026 / 07–08</span>
+                    <h4>Gemini 3.6 Flash 正式版上線<span class="badge-new">最新</span></h4>
+                    <p>全面提升 token 處理效率並降低延遲，賦予更強大的長文本推理表現與日常高頻協作能力。</p>
+                </div>
+            </div>
+            <div class="evolution-note">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align:-2px;">
+                    <circle cx="12" cy="12" r="9.2" stroke="currentColor" stroke-width="1.7"/>
+                    <path d="M12 11v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <circle cx="12" cy="7.6" r="1.1" fill="currentColor"/>
+                </svg>　實際可用之 AI 功能介面將依據您的 Google 帳號所在地區與裝置環境而自動適配。
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
